@@ -42,9 +42,17 @@ contract InfinitasFactory is ERC721, ERC721Enumerable, ERC721URIStorage, AccessC
         return super.tokenURI(tokenId);
     }
 
-    function supportsInterface(bytes4, interfaceId) public view override(ERC721, ERC721Enumerable, AccessControl) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721Enumerable, AccessControl) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
-    
+    function mintItem(address user, string memory _tokenURI) public returns (uint256) {
+        uint256 tokenId = _tokenIdCounter.current();
+        safeMint(user);
+        _setTokenURI(tokenId, _tokenURI);
+    }
+
+    function getTotalSupply() public view returns (uint256) {
+        return totalSupply();
+    }
 }
