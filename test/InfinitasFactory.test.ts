@@ -28,5 +28,26 @@ describe("Infinitas Factory contract", function () {
         it("Should have correct name", async () => {
             expect(await infinitasFactory.name()).to.eq("Infinitas");
         });
-    })
-})
+
+        it("Should track tokens", async () => {
+            await infinitasFactory.safeMint(owner.address);
+            await infinitasFactory.safeMint(owner.address);
+            expect(await infinitasFactory.getTotalSupply()).to.eq(2);
+        });
+
+        it("Should be able to enumerate", async () => {
+            await infinitasFactory.safeMint(owner.address);
+            await infinitasFactory.safeMint(owner.address);
+            await infinitasFactory.safeMint(owner.address);
+            await infinitasFactory.safeMint(owner.address);
+            await infinitasFactory.safeMint(owner.address);
+            await infinitasFactory.transferFrom(owner.address, jacob.address, 4);
+            let res = await infinitasFactory.tokenOfOwnerByIndex(jacob.address, 0);
+            expect(res).to.equal(4);
+            res = await infinitasFactory.balanceOf(jacob.address);
+            expect(res).to.eq(1);
+            res = await infinitasFactory.balanceOf(owner.address);
+            expect(res).to.equal(4)
+        })
+    });
+});
