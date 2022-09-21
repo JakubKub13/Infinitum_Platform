@@ -17,3 +17,26 @@ import "./InfinitumToken.sol";
  * iterate and validate the user who holds the winning tokenId number
  */
 
+contract Lottery is Ownable, VRFConsumerBase {
+    uint256 private lotteryPool;
+    uint256 public lotteryCount;
+    uint256 internal fee;
+    bytes32 internal keyHash;
+    InfinitasFactory public infinitasFactory;
+    InfinitumToken public infinitumToken;
+    IERC20 public linkToken;
+
+    mapping(uint256 => uint256) public winningNumber;
+    mapping(bytes32 => uint256) public requestIdToCount;
+
+    event LotteryStart(uint256 indexed _lotteryCount, bytes32 indexed _requestId);
+    event NumberReceived(bytes32 indexed _requestId, uint256 indexed _winningNumber);
+    event LotteryClaim(address indexed winner, uint256 indexed amount);
+    event WithdrawLink(address indexed from, uint256 indexed amount);
+
+    /**
+     * Constructor sets the necessary contract instances, addresses, and values for ChainLink's VRF mechanism
+     */
+
+    constructor() {}
+}
