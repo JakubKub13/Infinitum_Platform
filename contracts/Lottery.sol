@@ -8,3 +8,12 @@ import "./InfinitasFactory.sol";
 import "./InfinitumToken.sol";
 
 
+/**
+ * The Lottery contract adds a lottery feature to InfinitumFarm contract which uses Infinitas NFT tokenId as 
+ * the entrance ticked. This contract utilizes ChainLinks's VRF to create verifieable randomness for the winner number
+ * Basic iteration of the lottery feature in Infinitum Platform. Infinitum farm contract has mintNFT function
+ * which invokes transfer of tokens to fund the lotteryPool. 
+ * The internal validateWinner function uses ERC721Enumerable standard with tokenOfOwnerByIndex functionality to
+ * iterate and validate the user who holds the winning tokenId number
+ */
+
