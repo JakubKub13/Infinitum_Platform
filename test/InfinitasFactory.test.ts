@@ -19,4 +19,14 @@ describe("Infinitas Factory contract", function () {
         let minter = await infinitasFactory.MINTER_ROLE();
         await infinitasFactory.grantRole(minter, owner.address);
     });
+
+    describe("Initialize", async () => {
+        it("Should deploy without errors", async () => {
+            expect(infinitasFactory).to.be.ok;
+        });
+
+        it("Should have correct name", async () => {
+            expect(await infinitasFactory.name()).to.eq("Infinitas");
+        });
+    })
 })
