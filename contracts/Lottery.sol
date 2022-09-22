@@ -75,5 +75,22 @@ contract Lottery is Ownable, VRFConsumerBase {
         return requestRandomness(keyHash, fee);
     }
 
+    /**
+     * Chainlink VRF will callback into this function with the requestId and random number
+     * It takes totalSupply of Infinitas NFTs as  the divisor and uses CHainLink's returned number as the dividend.
+     * The winningNumber mapping takes the requestIdToCount mapping as an argument which uses the _requestId as its argument and points
+     * to the modulus of the tokenIds and random number
+     * @param _requestId -> The return value used to track the VRF call with the current uint
+     * @param _randomness -> The verifiable random number returned from Chainlink's VRF contract
+     */
+
+    function fulfillRandomness(bytes32 _requestId, uint256 _randomness) internal override {
+        uint256 totalIds = infinitasFactory.getTotalSupply();
+        uint256 winningNum = _randomness % totalIds;
+        winningNumber[requestIdToCount[_requestId]] = winningNum;
+        emit NumberReceived(_requestId, winningNum);
+    }
+
+
 
 }
