@@ -56,4 +56,24 @@ contract Lottery is Ownable, VRFConsumerBase {
             fee = _fee;
             keyHash = _keyHash;
         }
+
+    /**
+     * getRandomNumber function call returns a requestId from the requestRandomness VRF function. 
+     * Mapping which we declared above as state variable requestIdToCount uses requestId as a key to point to the 
+     * current lotteryCount. The lotteryCount than increments.
+     */
+
+    function getWinningNumber() public onlyOwner {
+        bytes32 requestId = getRandomNumber();
+        requestIdToCount[requestId] = lotteryCount;
+        emit LotteryStart(lotteryCount, requestId);
+        lotteryCount++;
+    }
+
+    function getRandomNumber() internal returns (bytes32 requestId) {
+        uint256 userSeedNum = uint256(keccak256(abi.encodePacked(blockhash(block.number - 1))));
+        return requestRandomness(keyHash, fee);
+    }
+
+
 }
