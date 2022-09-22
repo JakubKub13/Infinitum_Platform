@@ -1,7 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.8;
 
-import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
+import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./InfinitasFactory.sol";
@@ -18,7 +19,12 @@ import "./InfinitumToken.sol";
  * iterate and validate the user who holds the winning tokenId number
  */
 
-contract Lottery is Ownable, VRFConsumerBase {
+contract Lottery is Ownable, VRFConsumerBaseV2 {
+    VRFCoordinatorV2Interface private immutable vrfCoordinatorV2;
+    uint64 private immutable subscriptionId;
+    uint32 private immutable callbackGasLimit;
+    uint16 private constant REQUEST_CONFIRMATION = 3;
+    uint32 private constant NUM_WORDS = 1;
     uint256 private lotteryPool;
     uint256 public lotteryCount;
     uint256 internal fee;
@@ -28,10 +34,10 @@ contract Lottery is Ownable, VRFConsumerBase {
     IERC20 public linkToken;
 
     mapping(uint256 => uint256) public winningNumber;
-    mapping(bytes32 => uint256) public requestIdToCount;
+    mapping(uint256 => uint256) public requestIdToCount;
 
-    event LotteryStart(uint256 indexed _lotteryCount, bytes32 indexed _requestId);
-    event NumberReceived(bytes32 indexed _requestId, uint256 indexed _winningNumber);
+    event LotteryStart(uint256 indexed _lotteryCount, uint256 indexed _requestId);
+    event NumberReceived(uint256 indexed _requestId, uint256 indexed _winningNumber);
     event LotteryClaim(address indexed winner, uint256 indexed amount);
     event AddInft(address indexed from, uint256 indexed amount);
     event WithdrawLink(address indexed from, uint256 indexed amount);
@@ -44,19 +50,22 @@ contract Lottery is Ownable, VRFConsumerBase {
         InfinitasFactory _infinitasFactory,
         InfinitumToken _infinitumToken,
         IERC20 _linkToken,
-        address _coorAddress,
-        address _linkTokenAddress,
+        address _vrfcoordinatorV2Address,
         uint256 _fee,
-        bytes32 _keyHash
-        ) VRFConsumerBase (
-            _coorAddress,
-            _linkTokenAddress
+        bytes32 _keyHash,
+        uint64 _subscriptionId,
+        uint32 _callbackGasLimit
+        ) VRFConsumerBaseV2 (
+            _vrfcoordinatorV2Address
         ) {
             infinitasFactory = _infinitasFactory;
             infinitumToken = _infinitumToken;
             linkToken = _linkToken;
             fee = _fee;
             keyHash = _keyHash;
+            vrfCoordinatorV2 = VRFCoordinatorV2Interface(_vrfcoordinatorV2Address);
+            subscriptionId = _subscriptionId;
+            callbackGasLimit = _callbackGasLimit;
         }
 
     /**
@@ -66,15 +75,15 @@ contract Lottery is Ownable, VRFConsumerBase {
      */
 
     function getWinningNumber() public onlyOwner {
-        bytes32 requestId = getRandomNumber();
+        uint256 requestId = getRandomNumber();
         requestIdToCount[requestId] = lotteryCount;
         emit LotteryStart(lotteryCount, requestId);
         lotteryCount++;
     }
 
-    function getRandomNumber() internal returns (bytes32 requestId) {
+    function getRandomNumber() internal returns (uint256 requestId) {
         //uint256 userSeedNum = uint256(keccak256(abi.encodePacked(blockhash(block.number - 1)))); // check this 
-        return requestRandomness(keyHash, fee);
+        return vrfCoordinatorV2.requestRandomWords(keyHash, subscriptionId, REQUEST_CONFIRMATION, callbackGasLimit, NUM_WORDS);
     }
 
     /**
@@ -83,12 +92,13 @@ contract Lottery is Ownable, VRFConsumerBase {
      * The winningNumber mapping takes the requestIdToCount mapping as an argument which uses the _requestId as its argument and points
      * to the modulus of the tokenIds and random number
      * @param _requestId -> The return value used to track the VRF call with the current uint
-     * @param _randomness -> The verifiable random number returned from Chainlink's VRF contract
+     * @param randomWords -> The verifiable random array of numbers returned from Chainlink's VRF contract
      */
 
-    function fulfillRandomness(bytes32 _requestId, uint256 _randomness) internal override {
-        uint256 totalIds = infinitasFactory.getTotalSupply();
-        uint256 winningNum = _randomness % totalIds;
+    
+    function fulfillRandomWords(uint256 _requestId, uint256[] memory randomWords) internal override {
+        uint totalIds = infinitasFactory.getTotalSupply();
+        uint256 winningNum = randomWords[0] % totalIds;
         winningNumber[requestIdToCount[_requestId]] = winningNum;
         emit NumberReceived(_requestId, winningNum);
     }
