@@ -33,6 +33,7 @@ contract Lottery is Ownable, VRFConsumerBase {
     event LotteryStart(uint256 indexed _lotteryCount, bytes32 indexed _requestId);
     event NumberReceived(bytes32 indexed _requestId, uint256 indexed _winningNumber);
     event LotteryClaim(address indexed winner, uint256 indexed amount);
+    event AddInft(address indexed from, uint256 indexed amount);
     event WithdrawLink(address indexed from, uint256 indexed amount);
 
     /**
@@ -103,6 +104,7 @@ contract Lottery is Ownable, VRFConsumerBase {
         require(inft > 0, "Lottery: You are adding 0");
         lotteryPool += inft;
         infinitumToken.transferFrom(from, address(this), inft);
+        emit AddInft(msg.sender, inft);
     }
 
     /**
