@@ -2,7 +2,6 @@ import { ethers, network } from "hardhat";
 import { expect } from "chai";
 import { Contract } from "ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { Sign } from "crypto";
 import { networkConfig } from "../helper-hardhat-config";
 
 describe("Lottery contract", function () {
@@ -30,7 +29,7 @@ describe("Lottery contract", function () {
             infinitumToken.address,
             mockLinkToken.address,
             networkConfig[network.config.chainId!]["vrfCoordinatorV2"],
-            
+
 
         ]
     })
