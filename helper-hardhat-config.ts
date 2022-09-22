@@ -17,15 +17,21 @@ export const networkConfig: networkConfigInfo = {
         gasLane: "",
         callbackGasLimit: "500000"
     },
-    4: {
-        name: "rinkeby",
+    5: {
+        name: "goerli",
         subscriptionId: "",
         gasLane: "",
-        callbackGasLimit: "500000"
-    },
+        callbackGasLimit: "500000",
+        vrfCoordinatorV2: "0x2Ca8E0C643bDe4C2E08ab1fA0da3401AdAD7734D"
+    }
     1: {
         name: "mainnet",
-    }
+        subscriptionId: "",
+        gasLane: "",
+        callbackGasLimit: "500000",
+        vrfCoordinatorV2: ""
+    },
+
 
 
 }
