@@ -9,6 +9,7 @@ import "./InfinitumToken.sol";
 
 
 /**
+ * This is V1 
  * The Lottery contract adds a lottery feature to InfinitumFarm contract which uses Infinitas NFT tokenId as 
  * the entrance ticked. This contract utilizes ChainLinks's VRF to create verifieable randomness for the winner number
  * Basic iteration of the lottery feature in Infinitum Platform. Infinitum farm contract has mintNFT function
@@ -71,7 +72,7 @@ contract Lottery is Ownable, VRFConsumerBase {
     }
 
     function getRandomNumber() internal returns (bytes32 requestId) {
-        uint256 userSeedNum = uint256(keccak256(abi.encodePacked(blockhash(block.number - 1))));
+        //uint256 userSeedNum = uint256(keccak256(abi.encodePacked(blockhash(block.number - 1)))); // check this 
         return requestRandomness(keyHash, fee);
     }
 
@@ -122,8 +123,29 @@ contract Lottery is Ownable, VRFConsumerBase {
             }
         }
     }
-    
 
+    /**
+     * This function allows the user with the winning NFT tokenId to claim the lotteryPool winnings
+     * It utilizes internal validateWinner function to verify that the user holds the winning tokenId number.
+     * Resets the lotteryPool balance to zero using check -> effects -> interaction smart contract pattern before sending money to
+     * user in order to prevent reentrancy attack.
+     */
 
+    function claimLotteryPrice() public {
+        require(validateWinner(msg.sender) && lotteryPool > 0, "Lottery: You are not a winner or lottery pool is empty");
+        uint256 toTransferPrice = lotteryPool;
+        lotteryPool = 0;
+        infinitumToken.transfer(msg.sender, toTransferPrice);
+        emit LotteryClaim(msg.sender, toTransferPrice);
+    }
 
+    function withdrawLink() public onlyOwner {
+        uint256 toTransferLink = linkToken.balanceOf(address(this));
+        linkToken.transfer(msg.sender, toTransferLink);
+        emit WithdrawLink(msg.sender, toTransferLink);
+    }
+
+    function getLinkBalance() public view returns (uint256) {
+        return linkToken.balanceOf(address(this));
+    }
 }
