@@ -91,6 +91,39 @@ contract Lottery is Ownable, VRFConsumerBase {
         emit NumberReceived(_requestId, winningNum);
     }
 
+    /**
+     * This function adds Infinitum token to the Lottery contract
+     * The Infinitum farm contract calls this function within its mintNFT function
+     * @param from -> the sender to the tx
+     * @param inft -> total amount of inft tokens to send
+     */
+
+    function addToLotteryPool(address from, uint256 inft) public {
+        require(inft > 0, "Lottery: You are adding 0");
+        lotteryPool += inft;
+        infinitumToken.transferFrom(from, address(this), inft);
+    }
+
+    /**
+     * This is an internal function that verifies that user's NFT tokenId matches the winning lottery number
+     * This function checks the amount of Infinitas NFTs in possesion of user. Than it iterates the tokenIds and returns true
+     * if the tokenId is the same as winning number. The unchecked keyword wraps the for loop to safe gas.
+     * @param userAddr -> the address of the user
+     */
+
+    function validateWinner(address userAddr) internal view returns (bool) {  
+        uint256 totalNfts = infinitasFactory.balanceOf(userAddr);
+        uint winNum = winningNumber[lotteryCount - 1];
+        unchecked {
+            for(uint256 i; i < totalNfts; i++) {
+                if(infinitasFactory.tokenOfOwnerByIndex(userAddr, i) == winNum) {
+                    return true;
+                }
+            }
+        }
+    }
+    
+
 
 
 }
