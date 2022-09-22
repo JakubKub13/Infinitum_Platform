@@ -38,5 +38,22 @@ contract Lottery is Ownable, VRFConsumerBase {
      * Constructor sets the necessary contract instances, addresses, and values for ChainLink's VRF mechanism
      */
 
-    constructor() {}
+    constructor(
+        InfinitasFactory _infinitasFactory,
+        InfinitumToken _infinitumToken,
+        IERC20 _linkToken,
+        address _coorAddress,
+        address _linkTokenAddress,
+        uint256 _fee,
+        bytes32 _keyHash
+        ) VRFConsumerBase (
+            _coorAddress,
+            _linkTokenAddress
+        ) {
+            infinitasFactory = _infinitasFactory;
+            infinitumToken = _infinitumToken;
+            linkToken = _linkToken;
+            fee = _fee;
+            keyHash = _keyHash;
+        }
 }
