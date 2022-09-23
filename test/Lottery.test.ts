@@ -2,10 +2,10 @@ import { pTokens } from 'ptokens'
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { assert, expect } from "chai";
 import { network, deployments, ethers } from "hardhat";
-import { developemntChains, networkConfig } from "../helper-hardhat-config";
+import { developmentChains, networkConfig } from "../helper-hardhat-config";
 import { InfinitasFactory, InfinitumToken ,Lottery, VRFCoordinatorV2Mock, MockERC20 } from "../typechain-types"
 
-!developemntChains.includes(network.name)
+!developmentChains.includes(network.name)
     ? describe.skip
     : describe("Lottery testing", function() {
         let accounts: SignerWithAddress[];
@@ -25,6 +25,10 @@ import { InfinitasFactory, InfinitumToken ,Lottery, VRFCoordinatorV2Mock, MockER
             jacob = accounts[1];
             martin = accounts[2];
             await deployments.fixture(["all"]);
-            
+            vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock");
+            mockLink = await ethers.getContract("MockERC20");
+            infinitumToken = await ethers.getContract("InfinitumToken");
+            infinitasFactory = await ethers.getContract("InfinitasFactory");
+            lottery = await ethers.getContract("Lottery");
         })
     })
