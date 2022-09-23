@@ -30,5 +30,24 @@ import { InfinitasFactory, InfinitumToken ,Lottery, VRFCoordinatorV2Mock, MockER
             infinitumToken = await ethers.getContract("InfinitumToken");
             infinitasFactory = await ethers.getContract("InfinitasFactory");
             lottery = await ethers.getContract("Lottery");
-        })
+        });
+
+        describe("Initialization", async() => {
+            it("Should deploy without errors", async () => {
+                expect(lottery).to.be.ok
+                expect(infinitasFactory).to.be.ok
+                expect(infinitumToken).to.be.ok
+                expect(vrfCoordinatorV2Mock).to.be.ok
+                expect(mockLink).to.be.ok
+            });
+
+            it("Should track tokenIds", async function () {
+                let minter = await infinitasFactory.MINTER_ROLE()
+                await infinitasFactory.grantRole(minter, owner.address)
+                await infinitasFactory.safeMint(jacob.address)
+                await infinitasFactory.safeMint(jacob.address)
+                let res = await infinitasFactory.getTotalSupply()
+                expect(await infinitasFactory.getTotalSupply()).to.eq(2)
+            })
+        });
     })
