@@ -11,18 +11,25 @@ const deployINFTtoken: DeployFunction = async function (
     const { deploy, log } = deployments;
     const { deployer } = await getNamedAccounts();
     const chainId = network.config.chainId;
+    const args = []
     
     log("Deploying Infinitum token.......");
-    await deploy("InfinitumToken", {
+    const infinitumToken = await deploy("InfinitumToken", {
         from: deployer,
         log: true,
-        args: []
+        args: args
     })
     log("Infinitum token Deployed!");
     log("----------------------------------------------");
     log("You are deploying to a local network, you will need a local network running to interact");
     log("Please run npx hardhat console --network localhost to interact with deployed smart contracts");
     log("-----------------------------------------------");
+
+    // Verify the deployment
+    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+        log("Verifying......")
+        await verify(infinitumToken.address, args)
+    }
 }
 
 export default deployINFTtoken

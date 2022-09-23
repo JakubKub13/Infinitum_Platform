@@ -29,10 +29,10 @@ const deployLottery: DeployFunction = async function (
         const infinitasFactory = await ethers.getContract("InfinitasFactory");
         infinitasFactoryAddress = infinitasFactory.address;
     } else {
-        infinitumTokenAddress = networkConfig[network.config.chainId?][""]
-        infinitasFactoryAddress = networkConfig[network.config.chainId?][""]
-        vrfCoordinatorV2Address = networkConfig[network.config.chainId?]["vrfCoordinatorV2"];
-        subscriptionId = networkConfig[network.config.chainId?]["subscriptionId"];
+        infinitumTokenAddress = networkConfig[network.config.chainId!][""]
+        infinitasFactoryAddress = networkConfig[network.config.chainId!][""]
+        vrfCoordinatorV2Address = networkConfig[network.config.chainId!]["vrfCoordinatorV2"];
+        subscriptionId = networkConfig[network.config.chainId!]["subscriptionId"];
     }
     const waitBlockConfirmation = developmentChains.includes(network.name) ? 1 : VERIFICATION_BLOCK_CONFIRMATIONS
     log("----------------------------------------------------------------")
@@ -40,15 +40,25 @@ const deployLottery: DeployFunction = async function (
     const args: any[] = [
         infinitasFactoryAddress,
         infinitumTokenAddress,
-
+        vrfCoordinatorV2Address,
+        networkConfig[network.config.chainId!]["gasLane"],
+        networkConfig[network.config.chainId!]["subscriptionId"],
+        networkConfig[network.config.chainId!]["callbackGasLimit"]
     ]
-    //InfinitasFactory _infinitasFactory,
-    //    InfinitumToken _infinitumToken,
-    //    IERC20 _linkToken,
-    //    address _vrfcoordinatorV2Address,
-    //    uint256 _fee,
-    //    bytes32 _keyHash,
-    //    uint64 _subscriptionId,
-    //    uint32 _callbackGasLimit
 
+    const lottery = await deploy("Lottery", {
+        from: deployer,
+        log: true,
+        args: args,
+        waitConfirmation: waitBlockConfirmation
+    })
+
+    // Verify the deployment
+    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+        log("Verifying......")
+        await verify(lottery.address, args)
+    }
 }
+
+export default deployLottery
+deployLottery.tags = ["all", "lottery"]

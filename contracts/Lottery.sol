@@ -27,7 +27,6 @@ contract Lottery is Ownable, VRFConsumerBaseV2 {
     uint32 private constant NUM_WORDS = 1;
     uint256 private lotteryPool;
     uint256 public lotteryCount;
-    uint256 internal fee;
     bytes32 internal keyHash;
     InfinitasFactory public infinitasFactory;
     InfinitumToken public infinitumToken;
@@ -49,7 +48,6 @@ contract Lottery is Ownable, VRFConsumerBaseV2 {
         InfinitasFactory _infinitasFactory,
         InfinitumToken _infinitumToken,
         address _vrfcoordinatorV2Address,
-        uint256 _fee,
         bytes32 _keyHash,
         uint64 _subscriptionId,
         uint32 _callbackGasLimit
@@ -58,7 +56,6 @@ contract Lottery is Ownable, VRFConsumerBaseV2 {
         ) {
             infinitasFactory = _infinitasFactory;
             infinitumToken = _infinitumToken;
-            fee = _fee;
             keyHash = _keyHash;
             vrfCoordinatorV2 = VRFCoordinatorV2Interface(_vrfcoordinatorV2Address);
             subscriptionId = _subscriptionId;
