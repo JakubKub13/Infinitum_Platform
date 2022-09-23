@@ -4,6 +4,8 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 
 const BASE_FEE = "250000000000000000";
 const GAS_PRICE_LINK = 1e9;
+const NAME = "MockLink";
+const SYMBOL = "mLINK";
 
 const deployMocks: DeployFunction = async function (
     hre: HardhatRuntimeEnvironment
@@ -19,8 +21,21 @@ const deployMocks: DeployFunction = async function (
             from: deployer,
             log: true,
             args: [BASE_FEE, GAS_PRICE_LINK],
-        })
+        }),
+        await deploy("MockERC20", {
+            from: deployer,
+            log: true,
+            args: [NAME, SYMBOL]
+        });
+
+        log("Mocks Deployed!")
+        log("----------------------------------------------")
+
+        log("You are deploying to a local network, you will need a local network running to interact")
+        log("Please run npx hardhat console --network localhost to interact with deployed smart contracts")
+        log("-----------------------------------------------")
     }
-
-
 }
+
+export default deployMocks
+deployMocks.tags = ["all", "mocks"]
