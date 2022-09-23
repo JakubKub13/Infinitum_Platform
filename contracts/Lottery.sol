@@ -31,7 +31,6 @@ contract Lottery is Ownable, VRFConsumerBaseV2 {
     bytes32 internal keyHash;
     InfinitasFactory public infinitasFactory;
     InfinitumToken public infinitumToken;
-    IERC20 public linkToken;
 
     mapping(uint256 => uint256) public winningNumber;
     mapping(uint256 => uint256) public requestIdToCount;
@@ -49,7 +48,6 @@ contract Lottery is Ownable, VRFConsumerBaseV2 {
     constructor(
         InfinitasFactory _infinitasFactory,
         InfinitumToken _infinitumToken,
-        IERC20 _linkToken,
         address _vrfcoordinatorV2Address,
         uint256 _fee,
         bytes32 _keyHash,
@@ -60,7 +58,6 @@ contract Lottery is Ownable, VRFConsumerBaseV2 {
         ) {
             infinitasFactory = _infinitasFactory;
             infinitumToken = _infinitumToken;
-            linkToken = _linkToken;
             fee = _fee;
             keyHash = _keyHash;
             vrfCoordinatorV2 = VRFCoordinatorV2Interface(_vrfcoordinatorV2Address);
@@ -149,15 +146,5 @@ contract Lottery is Ownable, VRFConsumerBaseV2 {
         lotteryPool = 0;
         infinitumToken.transfer(msg.sender, toTransferPrice);
         emit LotteryClaim(msg.sender, toTransferPrice);
-    }
-
-    function withdrawLink() public onlyOwner {
-        uint256 toTransferLink = linkToken.balanceOf(address(this));
-        linkToken.transfer(msg.sender, toTransferLink);
-        emit WithdrawLink(msg.sender, toTransferLink);
-    }
-
-    function getLinkBalance() public view returns (uint256) {
-        return linkToken.balanceOf(address(this));
     }
 }
