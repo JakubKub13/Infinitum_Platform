@@ -1,36 +1,30 @@
-import { ethers, network } from "hardhat";
-import { expect } from "chai";
-import { Contract } from "ethers";
+import { pTokens } from 'ptokens'
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { networkConfig } from "../helper-hardhat-config";
+import { assert, expect } from "chai";
+import { network, deployments, ethers } from "hardhat";
+import { developemntChains, networkConfig } from "../helper-hardhat-config";
+import { InfinitasFactory, InfinitumToken ,Lottery, VRFCoordinatorV2Mock, MockERC20 } from "../typechain-types"
 
-describe("Lottery contract", function () {
-    let owner: SignerWithAddress;
-    let jacob: SignerWithAddress;
-    let martin: SignerWithAddress;
-    let lottery: Contract;
-    let infinitasFactory: Contract;
-    let infinitumToken: Contract;
-    let mockLinkToken: Contract;
+!developemntChains.includes(network.name)
+    ? describe.skip
+    : describe("Lottery testing", function() {
+        let accounts: SignerWithAddress[];
+        let  owner: SignerWithAddress;
+        let jacob: SignerWithAddress;
+        let martin: SignerWithAddress;
 
-    beforeEach(async () => {
-        const Lottery = await ethers.getContractFactory("Lottery");
-        const InfinitasFactory = await ethers.getContractFactory("InfinitasFactory");
-        const InfinitumToken = await ethers.getContractFactory("InfinitumToken");
-        const MockLinkToken = await ethers.getContractFactory("MockERC20");
-        mockLinkToken = await MockLinkToken.deploy("MockLink", "mLINK");
-        infinitasFactory = await InfinitasFactory.deploy();
-        infinitumToken = await InfinitumToken.deploy();
-        [owner, jacob, martin] = await ethers.getSigners();
-        await mockLinkToken.mint(owner.address, ethers.utils.parseEther("9999"));
+        let lottery: Lottery;
+        let infinitasFactory: InfinitasFactory;
+        let infinitumToken: InfinitumToken;
+        let mockLink: MockERC20;
+        let vrfCoordinatorV2Mock: VRFCoordinatorV2Mock;
 
-        let lotteryParams = [
-            infinitasFactory.address,
-            infinitumToken.address,
-            mockLinkToken.address,
-            networkConfig[network.config.chainId!]["vrfCoordinatorV2"],
-
-
-        ]
+        beforeEach(async () => {
+            accounts = await ethers.getSigners();
+            owner = accounts[0];
+            jacob = accounts[1];
+            martin = accounts[2];
+            await deployments.fixture(["all"]);
+            
+        })
     })
-})
