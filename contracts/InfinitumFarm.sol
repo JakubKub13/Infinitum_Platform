@@ -34,4 +34,18 @@ contract InfinitumFarm {
     event Unstake(address indexed from, uint256 amount);
     event YieldWithdraw(address indexed to, uint256 amount);
     event MintNFT(address indexed to, uint256 indexed tokenId);
+
+    constructor(
+        IERC20 _daiToken,
+        InfinitumToken _infinitumToken,
+        InfinitasFactory _infinitasFactory,
+        Lottery _lottery,
+        uint256 _nftPrice
+    ) {
+        daiStablecoin = _daiToken;
+        infinitumToken = _infinitumToken;
+        infinitasFactory = _infinitasFactory;
+        lottery = _lottery;
+        nftPrice = _nftPrice;
+    }
 }
