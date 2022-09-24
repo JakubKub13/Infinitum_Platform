@@ -71,7 +71,7 @@ contract InfinitumFarm {
 /// @dev The yiealdToTransfer variable calculates and transfers the result to inftBalance in order to save the user's unrealized yield
 /// @param amount -> The quantity of how much Dai user wants to withdraw
     function unstake(uint256 amount) public {
-        require(isStaking[msg.sender == true && stakingBalance[msg.sender] >= amount, "InfinitumFarm: Nothing to unstake"]);
+        require(isStaking[msg.sender] == true && stakingBalance[msg.sender] >= amount, "InfinitumFarm: Nothing to unstake");
         uint256 yieldToTransfer = calculateYieldTotal(msg.sender);
         startTime[msg.sender] = block.timestamp;
         uint256 balTransfer = amount;
@@ -79,7 +79,7 @@ contract InfinitumFarm {
         stakingBalance[msg.sender] -= balTransfer;
         daiStablecoin.transfer(msg.sender, balTransfer);
         inftBalance[msg.sender] += yieldToTransfer;
-        if(stakingBalance[msg.sender == 0]) {
+        if(stakingBalance[msg.sender] == 0) {
             isStaking[msg.sender] = false;
         }
         emit Unstake(msg.sender, balTransfer);
@@ -119,7 +119,7 @@ contract InfinitumFarm {
             yieldToTransfer += balanceBefore;
         }
 
-        startTime = block.timestamp;
+        startTime[msg.sender] = block.timestamp;
         infinitumToken.mint(msg.sender, yieldToTransfer);
         emit YieldWithdraw(msg.sender, yieldToTransfer);
     }
@@ -133,7 +133,7 @@ contract InfinitumFarm {
         require(infinitumToken.balanceOf(msg.sender) >= nftPrice, "InfinitumFarm: Not enough tokens to buy");
         lottery.addToLotteryPool(msg.sender, nftPrice);
         uint256 tokenId = infinitasFactory.mintItem(user, tokenURI);
-        nftCount[tokenId]++;
+        nftCount[tokenURI]++;
         emit MintNFT(msg.sender, tokenId);
     }
 }
