@@ -47,4 +47,23 @@ import { InfinitasFactory, InfinitumToken ,Lottery, VRFCoordinatorV2Mock  } from
                 expect(await infinitasFactory.getTotalSupply()).to.eq(2)
             });
         });
+
+        describe("Testing Events", function () {
+            beforeEach(async () => {
+                let minter = await infinitasFactory.MINTER_ROLE();
+                await Promise.all([
+                    infinitasFactory.grantRole(minter, owner.address),
+                    infinitumToken.grantRole(minter, owner.address),
+                    infinitumToken.mint(owner.address, ethers.utils.parseEther("999")),
+                    infinitasFactory.safeMint(jacob.address),
+                    infinitasFactory.safeMint(martin.address),
+                    infinitasFactory.safeMint(jacob.address),
+                    infinitasFactory.safeMint(martin.address),
+                    infinitasFactory.safeMint(jacob.address),
+                    infinitasFactory.safeMint(martin.address),
+                    infinitumToken.approve(lottery.address, ethers.utils.parseEther("25")),
+                    lottery.addToLotteryPool(owner.address, ethers.utils.parseEther("25"))
+                ])
+            })
+        })
     });
