@@ -48,4 +48,23 @@ contract InfinitumFarm {
         lottery = _lottery;
         nftPrice = _nftPrice;
     }
+
+///@notice This function locks user's DAI within the contract
+/// @dev If the user has already staked dai the
+/// @param amount is the Quantity of how much Dai user wants to add.
+    function stake(uint256 amount) public {
+        require(amount > 0 && daiStablecoin.balanceOf(msg.sender) >= amount, "InfinitumFarm: You want to stake 0 DAI or don't have enough tokens to stake");
+
+        if(isStaking[msg.sender] == true) {
+            uint256 toTransferAmount = calculateYieldTotal(msg.sender);
+        }
+    }
+
+
+
+    function calculateYieldTime(address user) public view returns (uint256) {}
+
+    function calculateYieldTotal(address user) public view returns (uint256) {}
+
+
 }
