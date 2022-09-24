@@ -62,9 +62,19 @@ contract InfinitumFarm {
 
 
 
-    function calculateYieldTime(address user) public view returns (uint256) {}
+    function calculateYieldTime(address user) public view returns (uint256) {
+        uint256 end = block.timestamp;
+        uint256 totalTimeStaked = end - startTime[user];
+        return totalTimeStaked;
+    }
 
-    function calculateYieldTotal(address user) public view returns (uint256) {}
+    function calculateYieldTotal(address user) public view returns (uint256) {
+        uint256 yieldTime = calculateYieldTime(user) * 10**18;
+        uint256 rate = 86400;
+        uint256 timeRate = yieldTime / rate;
+        uint256 rawYield = (stakingBalance[user] * timeRate) / 10**18;
+        return rawYield; 
+    }
 
 
 }
