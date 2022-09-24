@@ -49,7 +49,7 @@ contract InfinitumFarm {
         nftPrice = _nftPrice;
     }
 
-///@notice This function locks user's DAI within the contract
+/// @notice This function locks user's DAI within the contract
 /// @dev If the user has already staked dai the
 /// @param amount is the Quantity of how much Dai user wants to add.
     function stake(uint256 amount) public {
@@ -61,13 +61,18 @@ contract InfinitumFarm {
     }
 
 
-
+/// @notice This function calculates the total time the user has staked Dai in this contract
+/// @dev function should be internal in production the public visibility is for testing purposes
+/// @param user -> The address of the user staking
     function calculateYieldTime(address user) public view returns (uint256) {
         uint256 end = block.timestamp;
         uint256 totalTimeStaked = end - startTime[user];
         return totalTimeStaked;
     }
 
+/// @notice This function Calculates the user's yield while using a 86400 second rate (100% retunrs in 24 hours)
+/// @dev Because the Solidity language does not compute decimals the time is multiplied by 10**18
+/// @param user -> The address of the user
     function calculateYieldTotal(address user) public view returns (uint256) {
         uint256 yieldTime = calculateYieldTime(user) * 10**18;
         uint256 rate = 86400;
