@@ -65,5 +65,10 @@ import { InfinitasFactory, InfinitumToken ,Lottery, VRFCoordinatorV2Mock  } from
                     lottery.addToLotteryPool(owner.address, ethers.utils.parseEther("25"))
                 ])
             })
+
+            it("Should emit LotteryStart", async () => {
+                await lottery.getWinningNumber();
+                expect(await lottery.getWinningNumber()).to.calledImmediatelyAfter(lottery, "LotteryStart")
+            })
         })
     });
