@@ -63,7 +63,7 @@ contract Lottery is Ownable, VRFConsumerBaseV2 {
         }
 
     /**
-     * getRandomNumber function call returns a requestId from the requestRandomness VRF function. 
+     * getRandomNumber function call returns a requestId from the requestRandomWords VRF function. 
      * Mapping which we declared above as state variable requestIdToCount uses requestId as a key to point to the 
      * current lotteryCount. The lotteryCount than increments.
      */
