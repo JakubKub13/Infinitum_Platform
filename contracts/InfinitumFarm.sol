@@ -57,7 +57,14 @@ contract InfinitumFarm {
 
         if(isStaking[msg.sender] == true) {
             uint256 toTransferAmount = calculateYieldTotal(msg.sender);
+            inftBalance[msg.sender] += toTransferAmount;
         }
+
+        daiStablecoin.transferFrom(msg.sender, address(this), amount);
+        stakingBalance[msg.sender] += amount;
+        startTime[msg.sender] = block.timestamp;
+        isStaking[msg.sender] = true;
+        emit Stake(msg.sender, amount);
     }
 
 
