@@ -124,4 +124,16 @@ contract InfinitumFarm {
         emit YieldWithdraw(msg.sender, yieldToTransfer);
     }
 
+/// @notice This function calls the mintItem function in the InfinitasFactory contract which safeMint an NFT for user
+/// @dev Function also calls addToLotteryPool function ln the Lottery contract and transfer INFT token from user
+/// Calls the mintItem function in InfinitasFactory contract which calls the ERC721 safeMint function. Updates nftCount mapping
+/// @param user -> Address of the user
+/// @param tokenURI -> The Uniform Resource Identifier (URI) for tokenId
+    function mintNFT(address user, string calldata tokenURI) public {
+        require(infinitumToken.balanceOf(msg.sender) >= nftPrice, "InfinitumFarm: Not enough tokens to buy");
+        lottery.addToLotteryPool(msg.sender, nftPrice);
+        uint256 tokenId = infinitasFactory.mintItem(user, tokenURI);
+        nftCount[tokenId]++;
+        emit MintNFT(msg.sender, tokenId);
+    }
 }
