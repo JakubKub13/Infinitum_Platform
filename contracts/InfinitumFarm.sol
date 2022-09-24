@@ -95,7 +95,7 @@ contract InfinitumFarm {
         return totalTimeStaked;
     }
 
-/// @notice This function Calculates the user's yield while using a 86400 second rate (100% retunrs in 24 hours)
+/// @notice This function calculates the user's yield while using a 86400 second rate (100% retunrs in 24 hours)
 /// @dev Because the Solidity language does not compute decimals the time is multiplied by 10**18
 /// @param user -> The address of the user
     function calculateYieldTotal(address user) public view returns (uint256) {
@@ -106,5 +106,22 @@ contract InfinitumFarm {
         return rawYield; 
     }
 
+/// @notice This function accures the Infinitum token yield to the user
+/// @dev The conditional statement checks for stored INFT balance. If it exists accured yield is added to the
+/// accured yield before INFT mint function is called
+    function realizeYield() public {
+        uint256 yieldToTransfer = calculateYieldTotal(msg.sender);
+        require(yieldToTransfer > 0 || inftBalance[msg.sender] > 0, "InfinitumFarm: No Yield to realize");
+
+        if(inftBalance[msg.sender] != 0) {
+            uint256 balanceBefore = inftBalance[msg.sender];
+            inftBalance[msg.sender] = 0;
+            yieldToTransfer += balanceBefore;
+        }
+
+        startTime = block.timestamp;
+        infinitumToken.mint(msg.sender, yieldToTransfer);
+        emit YieldWithdraw(msg.sender, yieldToTransfer);
+    }
 
 }
