@@ -67,6 +67,24 @@ contract InfinitumFarm {
         emit Stake(msg.sender, amount);
     }
 
+/// @notice Returns staked Funds locked in the contract to the user. 
+/// @dev The yiealdToTransfer variable calculates and transfers the result to inftBalance in order to save the user's unrealized yield
+/// @param amount -> The quantity of how much Dai user wants to withdraw
+    function unstake(uint256 amount) public {
+        require(isStaking[msg.sender == true && stakingBalance[msg.sender] >= amount, "InfinitumFarm: Nothing to unstake"]);
+        uint256 yieldToTransfer = calculateYieldTotal(msg.sender);
+        startTime[msg.sender] = block.timestamp;
+        uint256 balTransfer = amount;
+        amount = 0; 
+        stakingBalance[msg.sender] -= balTransfer;
+        daiStablecoin.transfer(msg.sender, balTransfer);
+        inftBalance[msg.sender] += yieldToTransfer;
+        if(stakingBalance[msg.sender == 0]) {
+            isStaking[msg.sender] = false;
+        }
+        emit Unstake(msg.sender, balTransfer);
+    }
+
 
 /// @notice This function calculates the total time the user has staked Dai in this contract
 /// @dev function should be internal in production the public visibility is for testing purposes
