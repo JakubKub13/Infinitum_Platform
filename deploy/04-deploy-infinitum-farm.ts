@@ -6,4 +6,9 @@ import verify from "../verify";
 
 const deployInfinitumFarm: DeployFunction = async function (
     hre: HardhatRuntimeEnvironment
-) {}
+) {
+    const { deployments, getNamedAccounts, network, ethers } = hre;
+    const { deploy, log } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const chainId = network.config.chainId;
+}
