@@ -13,10 +13,10 @@ const deployInfinitumFarm: DeployFunction = async function (
     const { deploy, log } = deployments;
     const { deployer } = await getNamedAccounts();
     const chainId = network.config.chainId;
-    let daiStablecoin: Contract;
-    let infinitumToken: InfinitumToken;
-    let infinitasFactory: InfinitasFactory;
-    let lottery: Lottery;
+    let daiStablecoinAddr: Contract;
+    let infinitumTokenAddr: InfinitumToken;
+    let infinitasFactoryAddr: InfinitasFactory;
+    let lotteryAddr: Lottery;
 
     if(chainId == 31337) {
         

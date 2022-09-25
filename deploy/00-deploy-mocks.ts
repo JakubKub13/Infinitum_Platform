@@ -22,6 +22,11 @@ const deployMocks: DeployFunction = async function (
             log: true,
             args: [BASE_FEE, GAS_PRICE_LINK],
         }),
+        await deploy("MockERC20", {
+            from: deployer,
+            log: true,
+            args: ["DAI token", "DAI"]
+        })
         
         
 
