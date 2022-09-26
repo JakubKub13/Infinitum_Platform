@@ -23,4 +23,7 @@ chai.use(solidity)
         let infinitumToken: InfinitumToken;
         let infinitasFactory: InfinitasFactory
         let lottery: Lottery;
+
+        const daiAmount: BigNumber = ethers.utils.parseEther("25000");
+        const nftPrice: BigNumber = ethers.utils.parseEther("1")
     })

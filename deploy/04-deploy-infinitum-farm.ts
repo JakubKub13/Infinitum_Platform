@@ -17,7 +17,7 @@ const deployInfinitumFarm: DeployFunction = async function (
     let infinitumTokenAddr: InfinitumToken;
     let infinitasFactoryAddr: InfinitasFactory;
     let lotteryAddr: Lottery;
-    let nftPrice: BigNumber;
+    const nftPrice: BigNumber = ethers.utils.parseEther("1");
 
     if(chainId == 31337) {
         const daiMock = await ethers.getContract("MockERC20");
@@ -29,14 +29,12 @@ const deployInfinitumFarm: DeployFunction = async function (
        
         const lottery = await ethers.getContract("Lottery");
         lotteryAddr = lottery.address;
-        nftPrice = ethers.utils.parseEther("1");
         
 
     } else {
         daiStablecoinAddr = networkConfig[network.config.chainId![""]]
         infinitumTokenAddress = networkConfig[network.config.chainId!][""]
         infinitasFactoryAddress = networkConfig[network.config.chainId!][""]
-        nftPrice = ethers.utils.parseEther("1");
     }
     const waitBlockConfirmation = developmentChains.includes(network.name) ? 1 : VERIFICATION_BLOCK_CONFIRMATION
     log("-------------------------------------------------------------------------------------------")
