@@ -1,4 +1,3 @@
-import { pTokens } from 'ptokens'
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { assert, expect } from "chai";
 import { network, deployments, ethers } from "hardhat";

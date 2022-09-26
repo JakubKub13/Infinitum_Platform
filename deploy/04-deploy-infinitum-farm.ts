@@ -1,9 +1,9 @@
-import { Contract } from "ethers";
+import { BigNumber } from "ethers";
 import { getNamedAccounts, deployments, network, run } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { networkConfig, developmentChains, VERIFICATION_BLOCK_CONFIRMATION } from "../helper-hardhat-config";
-import { InfinitasFactory, InfinitumToken ,Lottery,   } from "../typechain-types"
+import { InfinitasFactory, InfinitumToken ,Lottery,  MockERC20 } from "../typechain-types"
 import verify from "../verify";
 
 const deployInfinitumFarm: DeployFunction = async function (
@@ -13,11 +13,11 @@ const deployInfinitumFarm: DeployFunction = async function (
     const { deploy, log } = deployments;
     const { deployer } = await getNamedAccounts();
     const chainId = network.config.chainId;
-    let daiStablecoinAddr: Contract;
+    let daiStablecoinAddr: MockERC20;
     let infinitumTokenAddr: InfinitumToken;
     let infinitasFactoryAddr: InfinitasFactory;
     let lotteryAddr: Lottery;
-    let nftPrice: Number;
+    let nftPrice: BigNumber;
 
     if(chainId == 31337) {
         const daiMock = await ethers.getContract("MockERC20");
