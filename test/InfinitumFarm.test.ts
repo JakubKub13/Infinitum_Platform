@@ -7,7 +7,6 @@ import { solidity } from "ethereum-waffle"
 import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  } from "../typechain-types"
 import { time } from "@openzeppelin/test-helpers"
 
-chai.use(solidity)
 
 !developmentChains.includes(network.name)
     ? describe.skip
@@ -25,5 +24,20 @@ chai.use(solidity)
         let lottery: Lottery;
 
         const daiAmount: BigNumber = ethers.utils.parseEther("25000");
-        const nftPrice: BigNumber = ethers.utils.parseEther("1")
+        const nftPrice: BigNumber = ethers.utils.parseEther("1");
+
+        beforeEach(async () => {
+            [owner, jacob, martin, peter, john ] = await ethers.getSigners();
+            await deployments.fixture(["all"]);
+            infinitumFarm = await ethers.getContract("InfinitumFarm");
+            mockDAI = await ethers.getContract("MockERC20");
+            infinitumToken = await ethers.getContract("InfinitumToken");
+            infinitasFactory = await ethers.getContract("InfinitasFactory");
+            lottery = await ethers.getContract("Lottery")
+
+
+            // DAI TRANSFERS---------------
+        })
+
+        
     })
