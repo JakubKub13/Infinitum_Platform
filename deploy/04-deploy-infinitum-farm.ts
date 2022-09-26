@@ -25,15 +25,18 @@ const deployInfinitumFarm: DeployFunction = async function (
         const infinitumToken = await ethers.getContract("InfinitumToken");
         infinitumTokenAddr = infinitumToken.address;
         const infinitasFactory = await ethers.getContract("InfinitasFactory");
-        infinitasFactoryAddr = infinitasFactory.addr;
+        infinitasFactoryAddr = infinitasFactory.address;
+       
         const lottery = await ethers.getContract("Lottery");
-        lotteryAddr = lottery.addr;
-        nftPrice = 1;
+        lotteryAddr = lottery.address;
+        nftPrice = ethers.utils.parseEther("1");
+        
+
     } else {
         daiStablecoinAddr = networkConfig[network.config.chainId![""]]
         infinitumTokenAddress = networkConfig[network.config.chainId!][""]
         infinitasFactoryAddress = networkConfig[network.config.chainId!][""]
-        nftPrice = 1;
+        nftPrice = ethers.utils.parseEther("1");
     }
     const waitBlockConfirmation = developmentChains.includes(network.name) ? 1 : VERIFICATION_BLOCK_CONFIRMATION
     log("-------------------------------------------------------------------------------------------")
@@ -41,7 +44,7 @@ const deployInfinitumFarm: DeployFunction = async function (
     const args: any[] = [
         daiStablecoinAddr,
         infinitumTokenAddr,
-        lotteryAddr,
+        infinitasFactoryAddr,
         lotteryAddr,
         nftPrice
     ] 
@@ -56,7 +59,7 @@ const deployInfinitumFarm: DeployFunction = async function (
     // Verify the deployment
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verifying......")
-        await verify(lottery.address, args)
+        await verify(infinitumFarm.address, args)
     }
 }
 
