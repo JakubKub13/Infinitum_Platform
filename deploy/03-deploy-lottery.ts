@@ -1,7 +1,8 @@
 import { getNamedAccounts, deployments, network, run } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { networkConfig, developmentChains, VERIFICATION_BLOCK_CONFIRMATION, networkConfig } from "../helper-hardhat-config";
+import { networkConfig, developmentChains, VERIFICATION_BLOCK_CONFIRMATION,  } from "../helper-hardhat-config";
+import { InfinitasFactory, InfinitumToken, VRFCoordinatorV2Mock   } from "../typechain-types"
 import verify from "../verify";
 
 const FUND_AMOUNT = "1000000000000000000000";
@@ -13,7 +14,10 @@ const deployLottery: DeployFunction = async function (
     const { deploy, log } = deployments;
     const { deployer } = await getNamedAccounts();
     const chainId = network.config.chainId;
-    let infinitumTokenAddress, infinitasFactoryAddress, vrfCoordinatorV2Address, subscriptionId;
+    let infinitumTokenAddress: InfinitumToken
+    let infinitasFactoryAddress: InfinitasFactory
+    let vrfCoordinatorV2Address: VRFCoordinatorV2Mock
+    let subscriptionId: Number
 
     if(chainId == 31337) {
         // create VRFV2 subscription
