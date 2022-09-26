@@ -51,7 +51,7 @@ const deployInfinitumFarm: DeployFunction = async function (
 
     const infinitumFarm = await deploy("InfinitumFarm", {
         from: deployer,
-        logs: true,
+        log: true,
         args: args,
         waitConfirmation: waitBlockConfirmation
     })
