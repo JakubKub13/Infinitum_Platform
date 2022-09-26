@@ -2,7 +2,7 @@ import { Contract } from "ethers";
 import { getNamedAccounts, deployments, network, run } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { networkConfig, developmentChains, } from "../helper-hardhat-config";
+import { networkConfig, developmentChains, VERIFICATION_BLOCK_CONFIRMATION } from "../helper-hardhat-config";
 import { InfinitasFactory, InfinitumToken ,Lottery,   } from "../typechain-types"
 import verify from "../verify";
 
@@ -35,8 +35,30 @@ const deployInfinitumFarm: DeployFunction = async function (
         infinitasFactoryAddress = networkConfig[network.config.chainId!][""]
         nftPrice = 1;
     }
+    const waitBlockConfirmation = developmentChains.includes(network.name) ? 1 : VERIFICATION_BLOCK_CONFIRMATION
+    log("-------------------------------------------------------------------------------------------")
 
-    
+    const args: any[] = [
+        daiStablecoinAddr,
+        infinitumTokenAddr,
+        lotteryAddr,
+        lotteryAddr,
+        nftPrice
+    ] 
 
+    const infinitumFarm = await deploy("InfinitumFarm", {
+        from: deployer,
+        logs: true,
+        args: args,
+        waitConfirmation: waitBlockConfirmation
+    })
 
+    // Verify the deployment
+    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+        log("Verifying......")
+        await verify(lottery.address, args)
+    }
 }
+
+export default deployInfinitumFarm
+deployInfinitumFarm.tags = ["all", "farm"]

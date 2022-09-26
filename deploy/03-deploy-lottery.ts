@@ -1,7 +1,7 @@
 import { getNamedAccounts, deployments, network, run } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { NetworkConfig, developmentChains, VERIFICATION_BLOCK_CONFIRMATIONS, networkConfig } from "../helper-hardhat-config";
+import { networkConfig, developmentChains, VERIFICATION_BLOCK_CONFIRMATION, networkConfig } from "../helper-hardhat-config";
 import verify from "../verify";
 
 const FUND_AMOUNT = "1000000000000000000000";
@@ -34,7 +34,7 @@ const deployLottery: DeployFunction = async function (
         vrfCoordinatorV2Address = networkConfig[network.config.chainId!]["vrfCoordinatorV2"];
         subscriptionId = networkConfig[network.config.chainId!]["subscriptionId"];
     }
-    const waitBlockConfirmation = developmentChains.includes(network.name) ? 1 : VERIFICATION_BLOCK_CONFIRMATIONS
+    const waitBlockConfirmation = developmentChains.includes(network.name) ? 1 : VERIFICATION_BLOCK_CONFIRMATION
     log("----------------------------------------------------------------")
 
     const args: any[] = [
