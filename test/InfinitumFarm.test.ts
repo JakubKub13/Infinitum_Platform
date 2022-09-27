@@ -125,5 +125,31 @@ import { time } from "@openzeppelin/test-helpers"
             })
         })
 
+        describe("Unstaking functionality", function () {
+            it("Should unstake balance from user", async () => {
+                let toTransfer = await ethers.utils.parseEther("100") 
+                await mockDAI.connect(jacob).approve(infinitumFarm.address, toTransfer)
+                await infinitumFarm.connect(jacob).stake(toTransfer)
+                res = await infinitumFarm.stakingBalance(jacob.address)
+                expect(Number(res)).to.be.greaterThan(0)
+                await infinitumFarm.connect(jacob).unstake(toTransfer)
+                expect(await infinitumFarm.stakingBalance(jacob.address)).to.eq(0)
+            });
+
+            it("Should remove staking status", async () => {
+                let toTransfer = await ethers.utils.parseEther("100") 
+                await mockDAI.connect(jacob).approve(infinitumFarm.address, toTransfer)
+                await infinitumFarm.connect(jacob).stake(toTransfer)
+                await infinitumFarm.connect(jacob).unstake(toTransfer)
+                expect(await infinitumFarm.isStaking(jacob.address)).to.eq(false)
+            });
+
+            it("Should transfer minter role of Infinitum token to Infinitum factory", async () => {
+                let minter = await infinitumToken.MINTER_ROLE()
+                await infinitumToken.grantRole(minter, infinitumFarm.address)
+                expect(await infinitumToken.hasRole(minter, infinitumFarm.address)).to.eq(true)
+            })
+        })
+
         
     })
