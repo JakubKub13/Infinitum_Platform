@@ -6,6 +6,7 @@ import { BigNumber } from "ethers";
 import { solidity } from "ethereum-waffle"
 import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  } from "../typechain-types"
 import { time } from "@openzeppelin/test-helpers"
+import {  MockProvider  } from "ethereum-waffle";
 
 
 
@@ -26,6 +27,16 @@ import { time } from "@openzeppelin/test-helpers"
         let infinitasFactory: InfinitasFactory
         let lottery: Lottery;
 
+        const timeTravel = async (provider: MockProvider, seconds: number) => {
+            await provider.send("evm_increaseTime", [seconds]);
+            await provider.send("evm_mine", []);
+        }
+
+        async function stakeAndTravel(stakingPool: InfinitumFarm, value: BigNumber, seconds: number, provider: any) {
+            await stakingPool.stake({ value });
+            await timeTravel(provider, seconds);
+        }
+        
         const daiAmount: BigNumber = ethers.utils.parseEther("25000");
         const nftPrice: BigNumber = ethers.utils.parseEther("1");
 
@@ -150,6 +161,5 @@ import { time } from "@openzeppelin/test-helpers"
                 expect(await infinitumToken.hasRole(minter, infinitumFarm.address)).to.eq(true)
             })
         })
-
-        
     })
+
