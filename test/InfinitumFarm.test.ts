@@ -3,10 +3,10 @@ import { assert, expect } from "chai";
 import { network, deployments, ethers } from "hardhat";
 import { developmentChains, networkConfig } from "../helper-hardhat-config";
 import { BigNumber } from "ethers";
-import { solidity } from "ethereum-waffle"
+import { MockProvider, solidity } from "ethereum-waffle"
 import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  } from "../typechain-types"
 import { time } from "@openzeppelin/test-helpers"
-import {  MockProvider  } from "ethereum-waffle";
+
 
 
 
@@ -26,6 +26,7 @@ import {  MockProvider  } from "ethereum-waffle";
         let infinitumToken: InfinitumToken;
         let infinitasFactory: InfinitasFactory
         let lottery: Lottery;
+        //let provider: MockProvider
 
         const timeTravel = async (provider: MockProvider, seconds: number) => {
             await provider.send("evm_increaseTime", [seconds]);
@@ -161,5 +162,34 @@ import {  MockProvider  } from "ethereum-waffle";
                 expect(await infinitumToken.hasRole(minter, infinitumFarm.address)).to.eq(true)
             })
         })
+
+        describe("Start from deployment for time increase", function () {
+            beforeEach(async () => {
+                let minter = await infinitumToken.MINTER_ROLE()
+                let NFTminter = await infinitasFactory.MINTER_ROLE()
+                await infinitumToken.grantRole(minter, infinitumFarm.address)
+                await infinitasFactory.grantRole(NFTminter, infinitumFarm.address)
+                let toTransfer = ethers.utils.parseEther("10")
+                await mockDAI.connect(jacob).approve(infinitumFarm.address, toTransfer)
+                await infinitumFarm.connect(jacob).stake(toTransfer)
+            })
+
+            describe("Yield", function () {
+                it("Should return correct yield time", async () => {
+                    let timeStart = await infinitumFarm.startTime(jacob.address)
+                    console.log(timeStart.toString())
+                    expect(Number(timeStart)).to.be.greaterThan(0)
+                    // increasing time by 24 hours -> 86400 seconds
+                    await network.provider.send("evm_increaseTime", [86400]);
+                    await network.provider.send("evm_mine", []);
+                    expect (await infinitumFarm.calculateYieldTime(jacob.address)).to.eq(86400)
+                })
+            })
+
+        })
+        
+        
+        
+        
     })
 
