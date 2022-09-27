@@ -5,7 +5,7 @@ import { developmentChains, networkConfig } from "../helper-hardhat-config";
 import { BigNumber } from "ethers";
 import { MockProvider, solidity } from "ethereum-waffle"
 import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  } from "../typechain-types"
-import { time } from "@openzeppelin/test-helpers"
+
 
 
 
@@ -183,6 +183,26 @@ import { time } from "@openzeppelin/test-helpers"
                     await network.provider.send("evm_increaseTime", [86400]);
                     await network.provider.send("evm_mine", []);
                     expect (await infinitumFarm.calculateYieldTime(jacob.address)).to.eq(86400)
+                })
+
+                it("Should mint correct token amount to the user staking and total supply", async () => {
+                    await network.provider.send("evm_increaseTime", [86400]);
+                    await network.provider.send("evm_mine", []);
+                    let time = await infinitumFarm.calculateYieldTime(jacob.address)
+                    let formatTime = time.toNumber() / 86400 // format seconds to days  
+                    let staked = await infinitumFarm.stakingBalance(jacob.address)
+                    let bal = staked * formatTime
+                    let newBal = ethers.utils.formatEther(bal.toString())
+                    let expected = Number.parseFloat(newBal).toFixed(3)
+                    
+                    await infinitumFarm.connect(jacob).realizeYield()
+
+                    res = await infinitumToken.totalSupply()
+                    let newRes = ethers.utils.formatEther(res);
+                    let formatRes = Number.parseFloat(newRes).toFixed(3).toString()
+                    expect(expected).to.eq(formatRes)
+                    console.log(formatRes)
+
                 })
             })
 
