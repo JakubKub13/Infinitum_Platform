@@ -214,6 +214,26 @@ import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  }
                     console.log(DAIstakingBalanceAfter.toString())
                     expect(Number(ethers.utils.formatEther(res))).to.be.approximately(10, .001)
                 })
+
+                // bug
+                it("Should return correct yield when partially unstaken", async () => {
+                    await network.provider.send("evm_increaseTime", [86400]); // After 1st day 
+                    await network.provider.send("evm_mine", []);
+                    let DAIstakingBalanceBefore = await infinitumFarm.stakingBalance(jacob.address)
+                    await infinitumFarm.connect(jacob).unstake(ethers.utils.parseEther("5"));
+                    let DAIstakingBalanceAfter1stWithdraw = await infinitumFarm.stakingBalance(jacob.address)
+                    await network.provider.send("evm_increaseTime", [86400]); // After 2nd day
+                    await network.provider.send("evm_mine", []);
+                    await infinitumFarm.connect(jacob).unstake(ethers.utils.parseEther("5"));
+                    let DAIstakingBalanceAfter2ndWithdraw = await infinitumFarm.stakingBalance(jacob.address)
+                    expect(await infinitumFarm.stakingBalance(jacob.address)).to.eq(0)
+                    console.log(DAIstakingBalanceBefore.toString())
+                    console.log(DAIstakingBalanceAfter1stWithdraw.toString())
+                    console.log(DAIstakingBalanceAfter2ndWithdraw.toString())
+                    await infinitumFarm.realizeYield()
+                    res = await infinitumToken.balanceOf(jacob.address)
+                    expect(Number(ethers.utils.formatEther(res))).to.be.approximately(15, .001)
+                })
             })
 
         })
