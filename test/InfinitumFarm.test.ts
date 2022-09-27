@@ -17,6 +17,7 @@ import { time } from "@openzeppelin/test-helpers"
         let martin: SignerWithAddress;
         let peter: SignerWithAddress;
         let john: SignerWithAddress;
+        let steve: SignerWithAddress;
         let infinitumFarm: InfinitumFarm;
         let mockDAI: MockERC20;
         let infinitumToken: InfinitumToken;
@@ -27,7 +28,7 @@ import { time } from "@openzeppelin/test-helpers"
         const nftPrice: BigNumber = ethers.utils.parseEther("1");
 
         beforeEach(async () => {
-            [owner, jacob, martin, peter, john ] = await ethers.getSigners();
+            [owner, jacob, martin, peter, john, steve ] = await ethers.getSigners();
             await deployments.fixture(["all"]);
             infinitumFarm = await ethers.getContract("InfinitumFarm");
             mockDAI = await ethers.getContract("MockERC20");
@@ -37,6 +38,24 @@ import { time } from "@openzeppelin/test-helpers"
 
 
             // DAI TRANSFERS---------------
+            await Promise.all([
+                mockDAI.mint(owner.address, daiAmount),
+                mockDAI.mint(jacob.address, daiAmount),
+                mockDAI.mint(martin.address, daiAmount),
+                mockDAI.mint(peter.address, daiAmount),
+                mockDAI.mint(john.address, daiAmount),
+                mockDAI.mint(steve.address, daiAmount)
+            ])
+        })
+
+        describe("Initialization", function () {
+            it("Should deploy contracts without errors", async () => {
+                expect(infinitasFactory).to.be.ok;
+                expect(infinitumFarm).to.be.ok;
+                expect(mockDAI).to.be.ok;
+                expect(infinitumToken).to.be.ok
+                expect(lottery).to.be.ok
+            })
         })
 
         
