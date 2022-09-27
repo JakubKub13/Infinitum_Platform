@@ -201,8 +201,18 @@ import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  }
                     let newRes = ethers.utils.formatEther(res);
                     let formatRes = Number.parseFloat(newRes).toFixed(3).toString()
                     expect(expected).to.eq(formatRes)
-                    console.log(formatRes)
+                })
 
+                it("Should update yield balance when unstaked", async () => {
+                    await network.provider.send("evm_increaseTime", [86400]);
+                    await network.provider.send("evm_mine", []);
+                    let DAIstakingBalanceBefore = await infinitumFarm.stakingBalance(jacob.address)
+                    await infinitumFarm.connect(jacob).unstake(ethers.utils.parseEther("5"));
+                    res = await infinitumFarm.inftBalance(jacob.address)
+                    let DAIstakingBalanceAfter = await infinitumFarm.stakingBalance(jacob.address)
+                    console.log(DAIstakingBalanceBefore.toString())
+                    console.log(DAIstakingBalanceAfter.toString())
+                    expect(Number(ethers.utils.formatEther(res))).to.be.approximately(10, .001)
                 })
             })
 
