@@ -8,6 +8,7 @@ import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  }
 import { time } from "@openzeppelin/test-helpers"
 
 
+
 !developmentChains.includes(network.name)
     ? describe.skip
     : describe("Infinitum Farm testing", function() {
@@ -55,6 +56,21 @@ import { time } from "@openzeppelin/test-helpers"
                 expect(mockDAI).to.be.ok;
                 expect(infinitumToken).to.be.ok
                 expect(lottery).to.be.ok
+            })
+
+            it("Should return name", async () => {
+                expect(await infinitumFarm.name()).to.eq("Infinitum Farm")
+                expect(await mockDAI.name()).to.eq("DAI token")
+                expect(await infinitumToken.name()).to.eq("Infinitum token")
+            })
+
+            it("Should return correct mockDAI balance of accounts", async () => {
+                expect(await mockDAI.balanceOf(owner.address)).to.eq(daiAmount);
+                expect(await mockDAI.balanceOf(jacob.address)).to.eq(daiAmount);
+                expect(await mockDAI.balanceOf(martin.address)).to.eq(daiAmount);
+                expect(await mockDAI.balanceOf(peter.address)).to.eq(daiAmount);
+                expect(await mockDAI.balanceOf(john.address)).to.eq(daiAmount);
+                expect(await mockDAI.balanceOf(steve.address)).to.eq(daiAmount);
             })
         })
 
