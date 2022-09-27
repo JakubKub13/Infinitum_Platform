@@ -12,6 +12,7 @@ import { time } from "@openzeppelin/test-helpers"
 !developmentChains.includes(network.name)
     ? describe.skip
     : describe("Infinitum Farm testing", function() {
+        let res: any;
         let accounts: SignerWithAddress[];
         let  owner: SignerWithAddress;
         let jacob: SignerWithAddress;
@@ -71,6 +72,25 @@ import { time } from "@openzeppelin/test-helpers"
                 expect(await mockDAI.balanceOf(peter.address)).to.eq(daiAmount);
                 expect(await mockDAI.balanceOf(john.address)).to.eq(daiAmount);
                 expect(await mockDAI.balanceOf(steve.address)).to.eq(daiAmount);
+            })
+        })
+
+        describe("Staking functionality", async() => {
+            it("Should stake and update mapping", async () => {
+                let toTransfer = await ethers.utils.parseEther("100")
+                await mockDAI.connect(jacob).approve(infinitumFarm.address, toTransfer)
+                expect(await infinitumFarm.isStaking(jacob.address)).to.eq(false)
+                expect(await infinitumFarm.connect(jacob).stake(toTransfer)).to.be.ok
+                expect(await infinitumFarm.stakingBalance(jacob.address)).to.eq(toTransfer)
+                expect(await infinitumFarm.isStaking(jacob.address)).to.eq(true)
+            })
+
+            it("Should transfer DAI from user", async () => {
+                let toTransfer = await ethers.utils.parseEther("100")
+                await mockDAI.connect(jacob).approve(infinitumFarm.address, toTransfer)
+                await infinitumFarm.connect(jacob).stake(toTransfer)
+                res = await mockDAI.balanceOf(jacob.address)
+                expect(Number(res)).to.be.lessThan(Number(daiAmount))
             })
         })
 
