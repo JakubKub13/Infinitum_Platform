@@ -72,7 +72,7 @@ import { time } from "@openzeppelin/test-helpers"
                 expect(await mockDAI.balanceOf(peter.address)).to.eq(daiAmount);
                 expect(await mockDAI.balanceOf(john.address)).to.eq(daiAmount);
                 expect(await mockDAI.balanceOf(steve.address)).to.eq(daiAmount);
-            })
+            });
         })
 
         describe("Staking functionality", async() => {
@@ -83,7 +83,7 @@ import { time } from "@openzeppelin/test-helpers"
                 expect(await infinitumFarm.connect(jacob).stake(toTransfer)).to.be.ok
                 expect(await infinitumFarm.stakingBalance(jacob.address)).to.eq(toTransfer)
                 expect(await infinitumFarm.isStaking(jacob.address)).to.eq(true)
-            })
+            });
 
             it("Should transfer DAI from user", async () => {
                 let toTransfer = await ethers.utils.parseEther("100")
@@ -91,6 +91,37 @@ import { time } from "@openzeppelin/test-helpers"
                 await infinitumFarm.connect(jacob).stake(toTransfer)
                 res = await mockDAI.balanceOf(jacob.address)
                 expect(Number(res)).to.be.lessThan(Number(daiAmount))
+            });
+
+            it("Should update staking balance with multiple stakes", async () => {
+                let toTransfer = await ethers.utils.parseEther("100")
+                await mockDAI.connect(martin).approve(infinitumFarm.address, toTransfer)
+                await infinitumFarm.connect(martin).stake(toTransfer)
+                await mockDAI.connect(peter).approve(infinitumFarm.address, toTransfer)
+                await infinitumFarm.connect(peter).stake(toTransfer)
+                await mockDAI.connect(john).approve(infinitumFarm.address, toTransfer)
+                await infinitumFarm.connect(john).stake(toTransfer)
+                await mockDAI.connect(steve).approve(infinitumFarm.address, toTransfer)
+                await infinitumFarm.connect(steve).stake(toTransfer)
+                expect(await infinitumFarm.isStaking(martin.address)).to.eq(true)
+                expect(await infinitumFarm.isStaking(peter.address)).to.eq(true)
+                expect(await infinitumFarm.isStaking(john.address)).to.eq(true)
+                expect(await infinitumFarm.isStaking(steve.address)).to.eq(true)
+            });
+
+            it("Should revert if user tries to stake 0 DAIs", async () => {
+                await expect(infinitumFarm.connect(martin).stake(0)).to.be.revertedWith("InfinitumFarm: You want to stake 0 DAI or don't have enough tokens to stake")
+            });
+
+            it("Should revert stake without sufficient allowance", async () => {
+                let toTransfer = await ethers.utils.parseEther("100") 
+                await expect(infinitumFarm.connect(jacob).stake(toTransfer)).to.be.revertedWith('ERC20: insufficient allowance')
+            });
+
+            it("Should revert with not enough funds", async () => {
+                let toTransfer = ethers.utils.parseEther("1000000")
+                await mockDAI.connect(jacob).approve(infinitumFarm.address, toTransfer)
+                await expect(infinitumFarm.connect(jacob).stake(toTransfer)).to.be.revertedWith("InfinitumFarm: You want to stake 0 DAI or don't have enough tokens to stake")
             })
         })
 
