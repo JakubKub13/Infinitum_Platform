@@ -62,7 +62,7 @@ describe("Infinitum token", () => {
         it("Should revert transfer from non default-admin" ,async () => {
             let minter = await infinitumToken.MINTER_ROLE();
             expect(await infinitumToken.grantRole(minter, martin.address)).to.be.ok;
-            expect(await infinitumToken.connect(jacob).grantRole(minter, martin.address)).to.be.reverted;
+            await expect( infinitumToken.connect(jacob).grantRole(minter, martin.address)).to.be.reverted;
         });
     });
 });
