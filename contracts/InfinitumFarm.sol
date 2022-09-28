@@ -47,7 +47,7 @@ contract InfinitumFarm {
         require(msg.sender == owner, "InfinitumFarm: Caller is not and owner of contract");
         _;
     }
-
+/// This modofier is called when user stakes & withdraws -> contract is able to track rewardPerToken() and userRewardPerTokenPaid
     modifier updateReward(address _account) {
         rewardPerTokenStored = rewardPerToken();
         updatedAt = lastTimeRewardApplicable();
@@ -58,4 +58,33 @@ contract InfinitumFarm {
         }
         _;
     }
+
+    function setRewardsDuration(uint256 _duration) external onlyOwner {
+        require(finishAt < block.timestamp, "InfinitumFarm: Reward duration has not finished yet");
+        duration = _duration;
+    }
+
+/// Owner can call to send infinitum tokens into this contract and set the reward rate
+    function modifyRewardAmount(uint256 _inftAmount) external onlyOwner updateReward(address(0)) {
+        if(block.timestamp > finishAt) {
+            rewardRate = _inftAmount / duration;
+        } else {
+            uint256 remainingRewards = rewardRate * (finishAt - block.timestamp);
+            rewardRate = (remainingRewards + _amount) / duration;
+        }
+        require(rewardRate > 0, "InfinitumFarm: Reward rate = 0");
+        require(rewardRate * duration <= infinitumToken.balanceOf(address(this)), "InfinitumFarm: Reward amount > balance");
+        finishAt = block.timestamp + duration;
+        updatedAt = block.timestamp;
+    }
+
+/// Users can call this function to stake DAI tokens
+    function stakeDAI(uint256 _daiAmount) external updateReward(msg.sender) {
+        require(_daiAmount > 0, "InfinitumFarm: No DAI tokens to stake");
+        daiToken.transferFrom(msg.sender, address(this), _daiAmount);
+        balanceOf[msg.sender] += _daiAmount; // keeps track of dai tokens staked by msg.sender
+        totalSupply += _daiAmount; // keeps track of total amount of dai tokens staked inside this contract
+    }
+
+
 }
