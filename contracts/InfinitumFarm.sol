@@ -70,7 +70,7 @@ contract InfinitumFarm {
             rewardRate = _inftAmount / duration;
         } else {
             uint256 remainingRewards = rewardRate * (finishAt - block.timestamp);
-            rewardRate = (remainingRewards + _amount) / duration;
+            rewardRate = (remainingRewards + _inftAmount) / duration;
         }
         require(rewardRate > 0, "InfinitumFarm: Reward rate = 0");
         require(rewardRate * duration <= infinitumToken.balanceOf(address(this)), "InfinitumFarm: Reward amount > balance");
@@ -86,7 +86,7 @@ contract InfinitumFarm {
         totalSupply += _daiAmount; // keeps track of total amount of dai tokens staked inside this contract
     }
 
-// Users call this function to withdraw staked DAI tokens
+/// Users call this function to withdraw staked DAI tokens
     function withdrawDAI(uint256 _daiAmount) external updateReward(msg.sender) {
         require(_daiAmount > 0, "InfinitumFarm: No DAI tokens to withdraw");
         balanceOf[msg.sender] -= _daiAmount;
@@ -98,7 +98,7 @@ contract InfinitumFarm {
         return _min(block.timestamp, finishAt);
     }
 
-// Calculates reward of Infinitum tokens per 1 DAI stored
+/// Calculates reward of Infinitum tokens per 1 DAI stored
     function rewardPerToken() public view returns (uint) {
         if(totalSupply == 0) {
             return rewardPerTokenStored;
@@ -106,6 +106,21 @@ contract InfinitumFarm {
         return rewardPerTokenStored + (rewardRate * (lastTimeRewardApplicable() - updatedAt) * 1e18) / totalSupply;
     }
 
+/// This function calculates the amount of rewards earned by account
+    function earned(address _account) public view returns (uint256) {
+        return(balanceOf[_account] * (rewardPerToken() - userRewardPerTokenPaid[_account])) / 1e18 + rewards[_account];
+    }
 
+/// User will be able to call this function to get reward in Infinitum tokens
+    function getYield() external updateReward(msg.sender) {
+        uint256 yield = rewards[msg.sender];
+        if(yield > 0) {
+            rewards[msg.sender] = 0;
+            infinitumToken.transfer(msg.sender, yield);
+        }
+    }
 
+    function _min(uint x, uint y) private pure returns (uint256) {
+        return x <= y ? x : y;
+    }
 }
