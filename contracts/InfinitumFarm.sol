@@ -1,10 +1,9 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.8;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./interfaces/IERC20.sol";
 import "./InfinitumToken.sol";
 import "./InfinitasFactory.sol";
-import "./Lottery.sol";
 
 /// @title Infinitum Farm
 /// @notice This contract is s simple yield farming dApp where users can lock up their DAI stablecoin and get rewards for that action
@@ -74,7 +73,7 @@ contract InfinitumFarm {
     function unstake(uint256 amount) public {
         require(isStaking[msg.sender] == true && stakingBalance[msg.sender] >= amount, "InfinitumFarm: Nothing to unstake");
         uint256 yieldToTransfer = calculateYieldTotal(msg.sender);
-        startTime[msg.sender] = block.timestamp;
+        startTime[msg.sender] = block.timestamp;  
         uint256 balTransfer = amount;
         amount = 0; 
         stakingBalance[msg.sender] -= balTransfer;
@@ -86,11 +85,7 @@ contract InfinitumFarm {
         emit Unstake(msg.sender, balTransfer);
     }
 
-    function returnStartTimeUser(address user) public view returns (uint256) {
-        uint256 Sttime = startTime[user];
-        return Sttime;
-    }
-
+   
 /// @notice This function calculates the total time the user has staked Dai in this contract
 /// @dev function should be internal in production the public visibility is for testing purposes
 /// @param user -> The address of the user staking
