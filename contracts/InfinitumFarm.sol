@@ -86,5 +86,13 @@ contract InfinitumFarm {
         totalSupply += _daiAmount; // keeps track of total amount of dai tokens staked inside this contract
     }
 
+// Users call this function to withdraw staked DAI tokens
+    function withdrawDAI(uint256 _daiAmount) external updateReward(msg.sender) {
+        require(_daiAmount > 0, "InfinitumFarm: No DAI tokens to withdraw");
+        balanceOf[msg.sender] -= _daiAmount;
+        totalSupply -= _daiAmount;
+        daiToken.transfer(msg.sender, _daiAmount);
+    }
+
 
 }
