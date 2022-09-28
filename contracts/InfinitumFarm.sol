@@ -94,5 +94,18 @@ contract InfinitumFarm {
         daiToken.transfer(msg.sender, _daiAmount);
     }
 
+    function lastTimeRewardApplicable() public view returns (uint) {
+        return _min(block.timestamp, finishAt);
+    }
+
+// Calculates reward of Infinitum tokens per 1 DAI stored
+    function rewardPerToken() public view returns (uint) {
+        if(totalSupply == 0) {
+            return rewardPerTokenStored;
+        }
+        return rewardPerTokenStored + (rewardRate * (lastTimeRewardApplicable() - updatedAt) * 1e18) / totalSupply;
+    }
+
+
 
 }
