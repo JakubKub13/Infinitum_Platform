@@ -16,7 +16,7 @@ const deployInfinitumFarm: DeployFunction = async function (
     let daiStablecoinAddr: MockERC20;
     let infinitumTokenAddr: InfinitumToken;
     let infinitasFactoryAddr: InfinitasFactory;
-    let lotteryAddr: Lottery;
+  
     const nftPrice: BigNumber = ethers.utils.parseEther("1");
 
     if(chainId == 31337) {
