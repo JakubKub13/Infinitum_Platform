@@ -235,11 +235,15 @@ import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  }
                     console.log(DAIstakingBalanceAfter1stWithdraw.toString())
                     console.log(DAIstakingBalanceAfter2ndWithdraw.toString())
                     //--------------------------------------
-                    let yieldToTransfer = await infinitumFarm.calculateYieldTotal(jacob.address)
-                    console.log(`Yield to transfer for Jacob is: ${yieldToTransfer}`)
-                    await infinitumFarm.realizeYield()
-                    res = await infinitumToken.balanceOf(jacob.address)
-                    expect(Number(ethers.utils.formatEther(res))).to.be.approximately(15, .001)
+                    let startTime = await infinitumFarm.startTime(jacob.address);
+                    let yieldTime =  (await infinitumFarm.calculateYieldTime(jacob.address)).toString()
+                    //let yieldToTransfer = await infinitumFarm.calculateYieldTotal(jacob.address)
+                    console.log(startTime.toString)
+                    console.log(yieldTime)
+                    //console.log(`Yield to transfer for Jacob is: ${yieldToTransfer}`)
+                    //await infinitumFarm.realizeYield()
+                    //res = await infinitumToken.balanceOf(jacob.address)
+                    //expect(Number(ethers.utils.formatEther(res))).to.be.approximately(15, .001)
                 })
             })
 

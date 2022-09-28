@@ -20,6 +20,7 @@ contract InfinitumFarm {
     mapping(address => uint256) public startTime;
     mapping(address => uint256) public inftBalance;
     mapping(string => uint256) public nftCount;
+    
 
     string public name = "Infinitum Farm";
 
@@ -85,14 +86,19 @@ contract InfinitumFarm {
         emit Unstake(msg.sender, balTransfer);
     }
 
+    function returnStartTimeUser(address user) public view returns (uint256) {
+        uint256 Sttime = startTime[user];
+        return Sttime;
+    }
 
 /// @notice This function calculates the total time the user has staked Dai in this contract
 /// @dev function should be internal in production the public visibility is for testing purposes
 /// @param user -> The address of the user staking
     function calculateYieldTime(address user) public view returns (uint256) {
         uint256 end = block.timestamp;
-        uint256 totalTimeStaked = end - startTime[user];
-        return totalTimeStaked;
+        return end;
+        //uint256 totalTime = end - startTime[user]; 
+        //return totalTime;
     }
 
 /// @notice This function calculates the user's yield while using a 86400 second rate (100% retunrs in 24 hours)
