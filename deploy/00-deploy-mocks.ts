@@ -17,11 +17,6 @@ const deployMocks: DeployFunction = async function (
 
     if (chainId == 31337) {
         log("Local network detected! Deploying mocks.......")
-        await deploy("VRFCoordinatorV2Mock", {
-            from: deployer,
-            log: true,
-            args: [BASE_FEE, GAS_PRICE_LINK],
-        }),
         await deploy("MockERC20", {
             from: deployer,
             log: true,

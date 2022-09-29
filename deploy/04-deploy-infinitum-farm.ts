@@ -3,7 +3,7 @@ import { getNamedAccounts, deployments, network, run } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { networkConfig, developmentChains, VERIFICATION_BLOCK_CONFIRMATION } from "../helper-hardhat-config";
-import { InfinitasFactory, InfinitumToken ,Lottery,  MockERC20 } from "../typechain-types"
+import { InfinitumToken, MockERC20 } from "../typechain-types"
 import verify from "../verify";
 
 const deployInfinitumFarm: DeployFunction = async function (
@@ -15,26 +15,16 @@ const deployInfinitumFarm: DeployFunction = async function (
     const chainId = network.config.chainId;
     let daiStablecoinAddr: MockERC20;
     let infinitumTokenAddr: InfinitumToken;
-    let infinitasFactoryAddr: InfinitasFactory;
   
-    const nftPrice: BigNumber = ethers.utils.parseEther("1");
 
     if(chainId == 31337) {
         const daiMock = await ethers.getContract("MockERC20");
         daiStablecoinAddr = daiMock.address;
         const infinitumToken = await ethers.getContract("InfinitumToken");
         infinitumTokenAddr = infinitumToken.address;
-        const infinitasFactory = await ethers.getContract("InfinitasFactory");
-        infinitasFactoryAddr = infinitasFactory.address;
-       
-        const lottery = await ethers.getContract("Lottery");
-        lotteryAddr = lottery.address;
-        
-
     } else {
         daiStablecoinAddr = networkConfig[network.config.chainId![""]]
         infinitumTokenAddress = networkConfig[network.config.chainId!][""]
-        infinitasFactoryAddress = networkConfig[network.config.chainId!][""]
     }
     const waitBlockConfirmation = developmentChains.includes(network.name) ? 1 : VERIFICATION_BLOCK_CONFIRMATION
     log("-------------------------------------------------------------------------------------------")
@@ -42,9 +32,6 @@ const deployInfinitumFarm: DeployFunction = async function (
     const args: any[] = [
         daiStablecoinAddr,
         infinitumTokenAddr,
-        infinitasFactoryAddr,
-        lotteryAddr,
-        nftPrice
     ] 
 
     const infinitumFarm = await deploy("InfinitumFarm", {
