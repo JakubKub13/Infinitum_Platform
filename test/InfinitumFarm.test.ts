@@ -4,7 +4,7 @@ import { network, deployments, ethers } from "hardhat";
 import { developmentChains, networkConfig } from "../helper-hardhat-config";
 import { BigNumber } from "ethers";
 import { MockProvider, solidity } from "ethereum-waffle"
-import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  } from "../typechain-types"
+import { InfinitasFactory, InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
 
 
 !developmentChains.includes(network.name)
@@ -23,6 +23,7 @@ import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  }
         let infinitumToken: InfinitumToken;
         
         const daiAmount: BigNumber = ethers.utils.parseEther("25000");
+        const infinitumAmount: BigNumber = ethers.utils.parseEther("1000000")
       
 
         beforeEach(async () => {
@@ -39,8 +40,19 @@ import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  }
                 mockDAI.mint(martin.address, daiAmount),
                 mockDAI.mint(peter.address, daiAmount),
                 mockDAI.mint(john.address, daiAmount),
-                mockDAI.mint(steve.address, daiAmount)
+                mockDAI.mint(steve.address, daiAmount),
             ])
+            let durationTime: number = 1000
+            await infinitumFarm.setRewardsDuration(durationTime)
+
+            let minter = await infinitumToken.MINTER_ROLE()
+            
+
+            // Mint 1 000 000 infinitum tokens to staking contract-------
+            await Promise.all([
+                infinitumToken.mint(owner.address, infinitumAmount)
+            ])
+            await infinitumFarm.modifyRewardAmount(infinitumAmount)
         })
 
         describe("Initialization", function () {
@@ -65,8 +77,6 @@ import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  }
             });
             
             it("Should set the duration of staking", async () => {
-                let durationTime: number = 1000
-                await infinitumFarm.setRewardsDuration(durationTime)
                 expect(await infinitumFarm.duration()).to.eq(1000)
             })
         })
