@@ -7,9 +7,6 @@ import { MockProvider, solidity } from "ethereum-waffle"
 import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  } from "../typechain-types"
 
 
-
-
-
 !developmentChains.includes(network.name)
     ? describe.skip
     : describe("Infinitum Farm testing", function() {
