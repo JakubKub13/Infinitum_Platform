@@ -24,6 +24,7 @@ import { InfinitasFactory, InfinitumToken, MockERC20, InfinitumFarm  } from "../
         
         const daiAmount: BigNumber = ethers.utils.parseEther("25000");
         const infinitumAmount: BigNumber = ethers.utils.parseEther("1000000")
+        const daiFarmAmount: BigNumber = ethers.utils.parseEther("10000000")
       
 
         beforeEach(async () => {
@@ -41,17 +42,21 @@ import { InfinitasFactory, InfinitumToken, MockERC20, InfinitumFarm  } from "../
                 mockDAI.mint(peter.address, daiAmount),
                 mockDAI.mint(john.address, daiAmount),
                 mockDAI.mint(steve.address, daiAmount),
+                mockDAI.mint(infinitumFarm.address, daiFarmAmount)
             ])
             let durationTime: number = 1000
             await infinitumFarm.setRewardsDuration(durationTime)
 
             let minter = await infinitumToken.MINTER_ROLE()
+            await infinitumToken.grantRole(minter, owner.address);
             
 
             // Mint 1 000 000 infinitum tokens to staking contract-------
             await Promise.all([
                 infinitumToken.mint(owner.address, infinitumAmount)
             ])
+            let balance = await infinitumFarm.balanceOf(infinitumFarm.address)
+            console.log(balance.toString())
             await infinitumFarm.modifyRewardAmount(infinitumAmount)
         })
 
