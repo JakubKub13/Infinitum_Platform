@@ -63,6 +63,12 @@ import { InfinitasFactory, InfinitumToken , Lottery, MockERC20, InfinitumFarm  }
                 expect(await mockDAI.balanceOf(john.address)).to.eq(daiAmount);
                 expect(await mockDAI.balanceOf(steve.address)).to.eq(daiAmount);
             });
+            
+            it("Should set the duration of staking", async () => {
+                let durationTime: number = 1000
+                await infinitumFarm.setRewardsDuration(durationTime)
+                expect(await infinitumFarm.duration()).to.eq(1000)
+            })
         })
 
         describe("Staking functionality", async() => {
