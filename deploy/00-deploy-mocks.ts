@@ -1,11 +1,7 @@
+import { BigNumber } from "ethers";
 import { getNamedAccounts, deployments, network, ethers } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-
-const BASE_FEE = "250000000000000000";
-const GAS_PRICE_LINK = 1e9;
-const NAME = "MockLink";
-const SYMBOL = "mLINK";
 
 const deployMocks: DeployFunction = async function (
     hre: HardhatRuntimeEnvironment
