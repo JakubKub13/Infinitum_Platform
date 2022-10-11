@@ -100,10 +100,15 @@ import { revertedWith } from "@nomiclabs/hardhat-waffle";
             it("Should revert when modifyReward is called but contract has no balance of INFT tokens", async () => {
                 expect(await infinitumFarm.modifyRewardAmount(1000)).to.be.revertedWith('InfinitumFarm: Reward amount > balance');
             });
+            
+            it("Should revert when modifyReward is called but the caller is not the owner", async () => {
+                await infinitumToken.mint(infinitumFarm.address, infinitumAmountInitFarm)
+                expect(await infinitumFarm.connect(jacob).modifyRewardAmount(1000)).to.be.revertedWith("InfinitumFarm: Caller is not and owner of contract")
+            })
         })
 
         // describe("Staking functionality", async() => {
-        //     })
+        
 
         // describe("Unstaking functionality", function () {
             
