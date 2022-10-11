@@ -1,10 +1,9 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { assert, expect } from "chai";
+import { expect } from "chai";
 import { network, deployments, ethers } from "hardhat";
-import { developmentChains, networkConfig } from "../helper-hardhat-config";
+import { developmentChains } from "../helper-hardhat-config";
 import { BigNumber } from "ethers";
-import { MockProvider, solidity } from "ethereum-waffle"
-import { InfinitasFactory, InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
+import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
 
 
 !developmentChains.includes(network.name)
