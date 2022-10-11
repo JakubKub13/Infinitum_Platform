@@ -20,9 +20,9 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
         let infinitumToken: InfinitumToken;
         
         const daiAmount: BigNumber = ethers.utils.parseEther("25000");
-        const infinitumAmount: BigNumber = ethers.utils.parseEther("1000000")
+        const infinitumAmountInitFarm: BigNumber = ethers.utils.parseEther("1000000")
         const daiAmountOwner: BigNumber = ethers.utils.parseEther("20000000")
-        const infinitumAmountOwner: BigNumber = ethers.utils.parseEther("2000000")
+        const infinitumAmountOwner: BigNumber = ethers.utils.parseEther("200000")
       
 
         beforeEach(async () => {
@@ -47,13 +47,17 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
             let minter = await infinitumToken.MINTER_ROLE()
             await infinitumToken.grantRole(minter, owner.address);
             await infinitumToken.mint(owner.address, infinitumAmountOwner);
+            await infinitumToken.mint(infinitumFarm.address, infinitumAmountInitFarm)
             
 
             // Owner sends 1 000 000 Dai tokens to staking contract-------
-            let ownerInitAmountToSetUpContract: BigNumber = ethers.utils.parseEther("1000000")
-            // let modifyRewardTx = await infinitumFarm.modifyRewardAmount(ownerInitAmountToSetUpContract);
-            // await modifyRewardTx.wait();
 
+            // // Reward user earns per second
+            
+            // }
+
+            let modifyRewardTx = await infinitumFarm.modifyRewardAmount(1000);
+            await modifyRewardTx.wait();
         })
 
         // DURATION 1000
@@ -88,6 +92,10 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
                 let initialDaiBalance = await infinitumFarm.totalSupply();
                 expect(initialDaiBalance.toString()).to.eq('0');
              })
+             it("Balance of INFT tokens in farm should be greater than reward amount", async () => {
+                let inftTokenFarmBal = await infinitumToken.balanceOf(infinitumFarm.address);
+                console.log(infinitumAmountInitFarm.toString());
+             }) 
         })
 
         // describe("Staking functionality", async() => {
