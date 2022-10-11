@@ -47,11 +47,7 @@ import { expect } from "chai";
             let minter = await infinitumToken.MINTER_ROLE()
             await infinitumToken.grantRole(minter, owner.address);
             await infinitumToken.mint(owner.address, infinitumAmountOwner);
-        })
-
-        // DURATION 1000
-
-
+        });
 
         describe("Initialization", function () {
             it("Should deploy contracts without errors", async () => {
@@ -63,7 +59,7 @@ import { expect } from "chai";
             it("Should return name", async () => {
                  expect(await mockDAI.name()).to.eq("DAI token")
                  expect(await infinitumToken.name()).to.eq("Infinitum token")
-            })
+            });
 
             it("Should return correct mockDAI balance of accounts", async () => {
                 expect(await mockDAI.balanceOf(owner.address)).to.eq(daiAmountOwner);
