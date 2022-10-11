@@ -49,12 +49,9 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
             
 
             // Mint 1 000 000 infinitum tokens to staking contract-------
-            // await Promise.all([
-            //     infinitumToken.mint(owner.address, infinitumAmount)
-            // ])
-            // let balance = await infinitumFarm.balanceOf(infinitumFarm.address)
-            // console.log(balance.toString())
-            // await infinitumFarm.modifyRewardAmount(infinitumAmount)
+            let infinitumFarmInitMntTx = await infinitumToken.mint(infinitumFarm.address, infinitumAmount);
+            await infinitumFarmInitMntTx.wait();
+
         })
 
         // DURATION 1000
@@ -66,8 +63,9 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
                 // expect(infinitumFarm).to.be.ok;
                 // expect(mockDAI).to.be.ok;
                 // expect(infinitumToken).to.be.ok
-                let minterOwner = await ;
-                console.log(_duration.toString());
+                let farmInitBal = await infinitumToken.balanceOf(infinitumFarm.address);
+                console.log(farmInitBal.toString());
+            
                 
                 
             })
