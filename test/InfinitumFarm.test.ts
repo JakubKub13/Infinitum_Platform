@@ -9,8 +9,6 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
 !developmentChains.includes(network.name)
     ? describe.skip
     : describe("Infinitum Farm testing", function() {
-        let res: any;
-        let accounts: SignerWithAddress[];
         let  owner: SignerWithAddress;
         let jacob: SignerWithAddress;
         let martin: SignerWithAddress;
@@ -59,38 +57,40 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
             await infinitumFarm.modifyRewardAmount(infinitumAmount)
         })
 
-        describe("Initialization", function () {
-            it("Should deploy contracts without errors", async () => {
-                expect(infinitumFarm).to.be.ok;
-                expect(mockDAI).to.be.ok;
-                expect(infinitumToken).to.be.ok
-            })
 
-            it("Should return name", async () => {
-                expect(await mockDAI.name()).to.eq("DAI token")
-                expect(await infinitumToken.name()).to.eq("Infinitum token")
-            })
 
-            it("Should return correct mockDAI balance of accounts", async () => {
-                expect(await mockDAI.balanceOf(owner.address)).to.eq(daiAmount);
-                expect(await mockDAI.balanceOf(jacob.address)).to.eq(daiAmount);
-                expect(await mockDAI.balanceOf(martin.address)).to.eq(daiAmount);
-                expect(await mockDAI.balanceOf(peter.address)).to.eq(daiAmount);
-                expect(await mockDAI.balanceOf(john.address)).to.eq(daiAmount);
-                expect(await mockDAI.balanceOf(steve.address)).to.eq(daiAmount);
-            });
+        // describe("Initialization", function () {
+        //     it("Should deploy contracts without errors", async () => {
+        //         expect(infinitumFarm).to.be.ok;
+        //         expect(mockDAI).to.be.ok;
+        //         expect(infinitumToken).to.be.ok
+        //     })
+
+        //     it("Should return name", async () => {
+        //         expect(await mockDAI.name()).to.eq("DAI token")
+        //         expect(await infinitumToken.name()).to.eq("Infinitum token")
+        //     })
+
+        //     it("Should return correct mockDAI balance of accounts", async () => {
+        //         expect(await mockDAI.balanceOf(owner.address)).to.eq(daiAmount);
+        //         expect(await mockDAI.balanceOf(jacob.address)).to.eq(daiAmount);
+        //         expect(await mockDAI.balanceOf(martin.address)).to.eq(daiAmount);
+        //         expect(await mockDAI.balanceOf(peter.address)).to.eq(daiAmount);
+        //         expect(await mockDAI.balanceOf(john.address)).to.eq(daiAmount);
+        //         expect(await mockDAI.balanceOf(steve.address)).to.eq(daiAmount);
+        //     });
             
-            it("Should set the duration of staking", async () => {
-                expect(await infinitumFarm.duration()).to.eq(1000)
-            })
-        })
+        //     it("Should set the duration of staking", async () => {
+        //         expect(await infinitumFarm.duration()).to.eq(1000)
+        //     })
+        // })
 
-        describe("Staking functionality", async() => {
-            })
+        // describe("Staking functionality", async() => {
+        //     })
 
-        describe("Unstaking functionality", function () {
+        // describe("Unstaking functionality", function () {
             
-            });
-        })
+        //     });
+        // })
 
             
