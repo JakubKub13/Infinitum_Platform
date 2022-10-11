@@ -107,7 +107,17 @@ import { revertedWith } from "@nomiclabs/hardhat-waffle";
             })
         })
 
-        // describe("Staking functionality", async() => {
+        describe("Testing Staking functionality", function () {
+            it("Caller of the function should have more or equal DAI to the amount he wants to stake", async () => {
+                let ownerBalDai = await mockDAI.balanceOf(owner.address);
+                console.log(`Owner balance of dai before staking is ${ownerBalDai.toString()}`)
+                let daiAmountToStake = 100
+                await mockDAI.approve(infinitumFarm.address, daiAmountToStake)
+                await infinitumFarm.stakeDAI(daiAmountToStake);
+                let daiAmountAfterStake = await mockDAI.balanceOf(owner.address);
+                console.log(`Owner balance of dai after staking is ${daiAmountAfterStake.toString()}`)
+            });
+        })
         
 
         // describe("Unstaking functionality", function () {
