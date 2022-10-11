@@ -128,41 +128,34 @@ import { revertedWith } from "@nomiclabs/hardhat-waffle";
 
                 let daiAmountToStake = ethers.utils.parseEther("1"); // Staking 1 DAI with 18 decimals
 
-                // await Promise.all([
-                //     mockDAI.mint(owner.address, daiAmountOwner),
-                //     mockDAI.mint(jacob.address, daiAmount),
-                //     mockDAI.mint(martin.address, daiAmount),
-                //     mockDAI.mint(peter.address, daiAmount),
-                //     mockDAI.mint(john.address, daiAmount),
-                //     mockDAI.mint(steve.address, daiAmount),
-                // ]);
+                await Promise.all([ 
+                    mockDAI.approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(jacob).approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(martin).approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(john).approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(steve).approve(infinitumFarm.address, daiAmountToStake),
+                ]);
 
-                await mockDAI.approve(infinitumFarm.address, daiAmountToStake);
-                await mockDAI.connect(jacob).approve(infinitumFarm.address, daiAmountToStake);
-                await mockDAI.connect(martin).approve(infinitumFarm.address, daiAmountToStake);
-                await mockDAI.connect(john).approve(infinitumFarm.address, daiAmountToStake);
-                await mockDAI.connect(steve).approve(infinitumFarm.address, daiAmountToStake);
-
-                
-                await infinitumFarm.stakeDAI(daiAmountToStake);
-                await infinitumFarm.connect(jacob).stakeDAI(daiAmountToStake);
-                await infinitumFarm.connect(martin).stakeDAI(daiAmountToStake);
-                await infinitumFarm.connect(john).stakeDAI(daiAmountToStake);
-                await infinitumFarm.connect(steve).stakeDAI(daiAmountToStake);
+                await Promise.all([
+                    infinitumFarm.stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(jacob).stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(martin).stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(john).stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(steve).stakeDAI(daiAmountToStake)
+                ]);
 
                 let stakedBalanceOwner = await infinitumFarm.balanceOf(owner.address);
-                let stakedBalanceOwnerFormatted = ethers.utils.formatEther(stakedBalanceOwner);
                 let stakedBalanceJacob = await infinitumFarm.balanceOf(jacob.address);
-                let stakedBalanceJacobFormatted = ethers.utils.formatEther(stakedBalanceJacob);
                 let stakedBalanceMartin = await infinitumFarm.balanceOf(martin.address);
-                let stakedBalanceMartinFormatted = ethers.utils.formatEther(stakedBalanceMartin);
                 let stakedBalanceJohn = await infinitumFarm.balanceOf(john.address);
-                let stakedBalanceJohnFormatted = ethers.utils.formatEther(stakedBalanceJohn);
                 let stakedBalanceSteve = await infinitumFarm.balanceOf(steve.address);
-                let stakedBalanceSteveFormatted = ethers.utils.formatEther(stakedBalanceSteve)
                 
-
-            })
+                expect(stakedBalanceOwner).to.eq(daiAmountToStake);
+                expect(stakedBalanceJacob).to.eq(daiAmountToStake);
+                expect(stakedBalanceMartin).to.eq(daiAmountToStake);
+                expect(stakedBalanceJohn).to.eq(daiAmountToStake);
+                expect(stakedBalanceSteve).to.eq(daiAmountToStake);
+            });
         })
         
 
