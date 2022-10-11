@@ -21,7 +21,8 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
         
         const daiAmount: BigNumber = ethers.utils.parseEther("25000");
         const infinitumAmount: BigNumber = ethers.utils.parseEther("1000000")
-        const daiFarmAmount: BigNumber = ethers.utils.parseEther("10000000")
+        const daiAmountOwner: BigNumber = ethers.utils.parseEther("20000000")
+        const infinitumAmountOwner: BigNumber = ethers.utils.parseEther("2000000")
       
 
         beforeEach(async () => {
@@ -33,24 +34,25 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
 
             // DAI TRANSFERS---------------
             await Promise.all([
-                mockDAI.mint(owner.address, daiAmount),
+                mockDAI.mint(owner.address, daiAmountOwner),
                 mockDAI.mint(jacob.address, daiAmount),
                 mockDAI.mint(martin.address, daiAmount),
                 mockDAI.mint(peter.address, daiAmount),
                 mockDAI.mint(john.address, daiAmount),
                 mockDAI.mint(steve.address, daiAmount),
-                mockDAI.mint(infinitumFarm.address, daiFarmAmount)
-            ])
+            ]);
             let durationTime: number = 1000
             await infinitumFarm.setRewardsDuration(durationTime)
 
             let minter = await infinitumToken.MINTER_ROLE()
             await infinitumToken.grantRole(minter, owner.address);
+            await infinitumToken.mint(owner.address, infinitumAmountOwner);
             
 
-            // Mint 1 000 000 infinitum tokens to staking contract-------
-            let infinitumFarmInitMntTx = await infinitumToken.mint(infinitumFarm.address, infinitumAmount);
-            await infinitumFarmInitMntTx.wait();
+            // Owner sends 1 000 000 Dai tokens to staking contract-------
+            let ownerInitAmountToSetUpContract: BigNumber = ethers.utils.parseEther("1000000")
+            // let modifyRewardTx = await infinitumFarm.modifyRewardAmount(ownerInitAmountToSetUpContract);
+            // await modifyRewardTx.wait();
 
         })
 
@@ -60,34 +62,33 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
 
         describe("Initialization", function () {
             it("Should deploy contracts without errors", async () => {
-                // expect(infinitumFarm).to.be.ok;
-                // expect(mockDAI).to.be.ok;
-                // expect(infinitumToken).to.be.ok
-                let farmInitBal = await infinitumToken.balanceOf(infinitumFarm.address);
-                console.log(farmInitBal.toString());
-            
-                
-                
+                expect(infinitumFarm).to.be.ok;
+                expect(mockDAI).to.be.ok;
+                expect(infinitumToken).to.be.ok                
             })
 
-        //     it("Should return name", async () => {
-        //         expect(await mockDAI.name()).to.eq("DAI token")
-        //         expect(await infinitumToken.name()).to.eq("Infinitum token")
-        //     })
+            it("Should return name", async () => {
+                 expect(await mockDAI.name()).to.eq("DAI token")
+                 expect(await infinitumToken.name()).to.eq("Infinitum token")
+            })
 
-        //     it("Should return correct mockDAI balance of accounts", async () => {
-        //         expect(await mockDAI.balanceOf(owner.address)).to.eq(daiAmount);
-        //         expect(await mockDAI.balanceOf(jacob.address)).to.eq(daiAmount);
-        //         expect(await mockDAI.balanceOf(martin.address)).to.eq(daiAmount);
-        //         expect(await mockDAI.balanceOf(peter.address)).to.eq(daiAmount);
-        //         expect(await mockDAI.balanceOf(john.address)).to.eq(daiAmount);
-        //         expect(await mockDAI.balanceOf(steve.address)).to.eq(daiAmount);
-        //     });
+            it("Should return correct mockDAI balance of accounts", async () => {
+                 expect(await mockDAI.balanceOf(owner.address)).to.eq(daiAmountOwner);
+                 expect(await mockDAI.balanceOf(jacob.address)).to.eq(daiAmount);
+                 expect(await mockDAI.balanceOf(martin.address)).to.eq(daiAmount);
+                 expect(await mockDAI.balanceOf(peter.address)).to.eq(daiAmount);
+                 expect(await mockDAI.balanceOf(john.address)).to.eq(daiAmount);
+                 expect(await mockDAI.balanceOf(steve.address)).to.eq(daiAmount);
+            });
             
-        //     it("Should set the duration of staking", async () => {
-        //         expect(await infinitumFarm.duration()).to.eq(1000)
-        //     })
-        // })
+             it("Should set the duration of staking", async () => {
+                 expect(await infinitumFarm.duration()).to.eq(1000)
+             });
+             it("Initial total supply of DAI in contract should be 0)", async () => {
+                let initialDaiBalance = await infinitumFarm.totalSupply();
+                expect(initialDaiBalance.toString()).to.eq('0');
+             })
+        })
 
         // describe("Staking functionality", async() => {
         //     })
@@ -95,7 +96,7 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
         // describe("Unstaking functionality", function () {
             
         //     });
-         })
-    })
+ })
+    
 
             
