@@ -49,22 +49,28 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
             
 
             // Mint 1 000 000 infinitum tokens to staking contract-------
-            await Promise.all([
-                infinitumToken.mint(owner.address, infinitumAmount)
-            ])
-            let balance = await infinitumFarm.balanceOf(infinitumFarm.address)
-            console.log(balance.toString())
-            await infinitumFarm.modifyRewardAmount(infinitumAmount)
+            // await Promise.all([
+            //     infinitumToken.mint(owner.address, infinitumAmount)
+            // ])
+            // let balance = await infinitumFarm.balanceOf(infinitumFarm.address)
+            // console.log(balance.toString())
+            // await infinitumFarm.modifyRewardAmount(infinitumAmount)
         })
 
+        // DURATION 1000
 
 
-        // describe("Initialization", function () {
-        //     it("Should deploy contracts without errors", async () => {
-        //         expect(infinitumFarm).to.be.ok;
-        //         expect(mockDAI).to.be.ok;
-        //         expect(infinitumToken).to.be.ok
-        //     })
+
+        describe("Initialization", function () {
+            it("Should deploy contracts without errors", async () => {
+                // expect(infinitumFarm).to.be.ok;
+                // expect(mockDAI).to.be.ok;
+                // expect(infinitumToken).to.be.ok
+                let minterOwner = await ;
+                console.log(_duration.toString());
+                
+                
+            })
 
         //     it("Should return name", async () => {
         //         expect(await mockDAI.name()).to.eq("DAI token")
@@ -91,6 +97,7 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
         // describe("Unstaking functionality", function () {
             
         //     });
-        // })
+         })
+    })
 
             
