@@ -47,17 +47,6 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
             let minter = await infinitumToken.MINTER_ROLE()
             await infinitumToken.grantRole(minter, owner.address);
             await infinitumToken.mint(owner.address, infinitumAmountOwner);
-            await infinitumToken.mint(infinitumFarm.address, infinitumAmountInitFarm)
-            
-
-            // Owner sends 1 000 000 Dai tokens to staking contract-------
-
-            // // Reward user earns per second
-            
-            // }
-
-            let modifyRewardTx = await infinitumFarm.modifyRewardAmount(1000);
-            await modifyRewardTx.wait();
         })
 
         // DURATION 1000
@@ -93,8 +82,17 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
                 expect(initialDaiBalance.toString()).to.eq('0');
              })
              it("Balance of INFT tokens in farm should be greater than reward amount", async () => {
+                await infinitumToken.mint(infinitumFarm.address, infinitumAmountInitFarm)
+                let modifyRewardTx = await infinitumFarm.modifyRewardAmount(1000);
+                await modifyRewardTx.wait();
                 let inftTokenFarmBal = await infinitumToken.balanceOf(infinitumFarm.address);
-                console.log(infinitumAmountInitFarm.toString());
+                let formattedInftTokenFarmBal = inftTokenFarmBal.toString()
+                let _rewardRate = await infinitumFarm.rewardRate();
+                let formattedRewRate = _rewardRate.toNumber();
+                let duration = await infinitumFarm.duration();
+                let formattedDuration = duration.toNumber();
+                let rewardAmount = formattedRewRate * formattedDuration;
+                expect(console.log(`Balance of Farm is ${formattedInftTokenFarmBal} which is greater than RewardAmount that is ${rewardAmount}`));
              }) 
         })
 
