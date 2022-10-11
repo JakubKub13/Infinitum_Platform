@@ -4,6 +4,7 @@ import { network, deployments, ethers } from "hardhat";
 import { developmentChains } from "../helper-hardhat-config";
 import { BigNumber } from "ethers";
 import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
+import { revertedWith } from "@nomiclabs/hardhat-waffle";
 
 
 !developmentChains.includes(network.name)
@@ -66,22 +67,23 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
             })
 
             it("Should return correct mockDAI balance of accounts", async () => {
-                 expect(await mockDAI.balanceOf(owner.address)).to.eq(daiAmountOwner);
-                 expect(await mockDAI.balanceOf(jacob.address)).to.eq(daiAmount);
-                 expect(await mockDAI.balanceOf(martin.address)).to.eq(daiAmount);
-                 expect(await mockDAI.balanceOf(peter.address)).to.eq(daiAmount);
-                 expect(await mockDAI.balanceOf(john.address)).to.eq(daiAmount);
-                 expect(await mockDAI.balanceOf(steve.address)).to.eq(daiAmount);
+                expect(await mockDAI.balanceOf(owner.address)).to.eq(daiAmountOwner);
+                expect(await mockDAI.balanceOf(jacob.address)).to.eq(daiAmount);
+                expect(await mockDAI.balanceOf(martin.address)).to.eq(daiAmount);
+                expect(await mockDAI.balanceOf(peter.address)).to.eq(daiAmount);
+                expect(await mockDAI.balanceOf(john.address)).to.eq(daiAmount);
+                expect(await mockDAI.balanceOf(steve.address)).to.eq(daiAmount);
             });
             
-             it("Should set the duration of staking", async () => {
-                 expect(await infinitumFarm.duration()).to.eq(1000)
-             });
-             it("Initial total supply of DAI in contract should be 0)", async () => {
+            it("Should set the duration of staking", async () => {
+                expect(await infinitumFarm.duration()).to.eq(1000)
+            });
+            it("Initial total supply of DAI in contract should be 0)", async () => {
                 let initialDaiBalance = await infinitumFarm.totalSupply();
                 expect(initialDaiBalance.toString()).to.eq('0');
-             })
-             it("Balance of INFT tokens in farm should be greater than reward amount", async () => {
+            });
+            
+            it("Balance of INFT tokens in farm should be greater than reward amount", async () => {
                 await infinitumToken.mint(infinitumFarm.address, infinitumAmountInitFarm)
                 let modifyRewardTx = await infinitumFarm.modifyRewardAmount(1000);
                 await modifyRewardTx.wait();
@@ -93,7 +95,11 @@ import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
                 let formattedDuration = duration.toNumber();
                 let rewardAmount = formattedRewRate * formattedDuration;
                 expect(console.log(`Balance of Farm is ${formattedInftTokenFarmBal} which is greater than RewardAmount that is ${rewardAmount}`));
-             }) 
+             });
+
+            it("Should revert when modifyReward is called but contract has no balance of INFT tokens", async () => {
+                expect(await infinitumFarm.modifyRewardAmount(1000)).to.be.revertedWith('InfinitumFarm: Reward amount > balance');
+            });
         })
 
         // describe("Staking functionality", async() => {
