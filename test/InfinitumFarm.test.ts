@@ -1,10 +1,9 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { expect } from "chai";
 import { network, deployments, ethers } from "hardhat";
 import { developmentChains } from "../helper-hardhat-config";
 import { BigNumber } from "ethers";
-import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types"
-import { revertedWith } from "@nomiclabs/hardhat-waffle";
+import { InfinitumToken, MockERC20, InfinitumFarm  } from "../typechain-types";
+import { expect } from "chai";
 
 
 !developmentChains.includes(network.name)
@@ -109,14 +108,10 @@ import { revertedWith } from "@nomiclabs/hardhat-waffle";
 
         describe("Testing Staking functionality", function () {
             it("Caller of the function should have more or equal DAI to the amount he wants to stake", async () => {
-                let ownerBalDai = await mockDAI.balanceOf(owner.address);
-                console.log(`Owner balance of dai before staking is ${ownerBalDai.toString()}`)
-                let daiAmountToStake = ethers.utils.parseEther("1")
-                console.log(daiAmountToStake.toString())
-                await mockDAI.approve(infinitumFarm.address, daiAmountToStake)
-                await infinitumFarm.stakeDAI(daiAmountToStake);
-                let daiAmountAfterStake = await mockDAI.balanceOf(owner.address);
-                console.log(`Owner balance of dai after staking is ${daiAmountAfterStake.toString()}`)
+                let jacobDAIBalance = await mockDAI.balanceOf(jacob.address);
+                let higherThanBalAmount = ethers.utils.parseEther("25001");
+                await mockDAI.connect(jacob).approve(infinitumFarm.address, higherThanBalAmount);
+                expect(await infinitumFarm.connect(jacob).stakeDAI(higherThanBalAmount)).to.be.revertedWith("ERC20: transfer amount exceeds balance");
             });
 
             it("Should stake correctly from multiple accounts", async () => {
