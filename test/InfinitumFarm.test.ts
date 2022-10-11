@@ -111,12 +111,23 @@ import { revertedWith } from "@nomiclabs/hardhat-waffle";
             it("Caller of the function should have more or equal DAI to the amount he wants to stake", async () => {
                 let ownerBalDai = await mockDAI.balanceOf(owner.address);
                 console.log(`Owner balance of dai before staking is ${ownerBalDai.toString()}`)
-                let daiAmountToStake = 100
+                let daiAmountToStake = ethers.utils.parseEther("1")
+                console.log(daiAmountToStake.toString())
                 await mockDAI.approve(infinitumFarm.address, daiAmountToStake)
                 await infinitumFarm.stakeDAI(daiAmountToStake);
                 let daiAmountAfterStake = await mockDAI.balanceOf(owner.address);
                 console.log(`Owner balance of dai after staking is ${daiAmountAfterStake.toString()}`)
             });
+
+            it("Should stake correctly from multiple accounts", async () => {
+                let ownerBalDaiBefore = await mockDAI.balanceOf(owner.address);
+                let jacobBalDaiBefore = await mockDAI.balanceOf(jacob.address);
+                let martinBalDaiBefore = await mockDAI.balanceOf(martin.address);
+                let johnBalDaiBefore = await mockDAI.balanceOf(john.address);
+                let steveBalDaiBefore = await mockDAI.balanceOf(steve.address);
+
+       
+            })
         })
         
 
