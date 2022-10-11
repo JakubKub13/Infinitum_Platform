@@ -126,6 +126,18 @@ import { revertedWith } from "@nomiclabs/hardhat-waffle";
                 let johnBalDaiBefore = await mockDAI.balanceOf(john.address);
                 let steveBalDaiBefore = await mockDAI.balanceOf(steve.address);
 
+                let daiAmountToStake = ethers.utils.parseEther("1"); // Staking 1 DAI with 18 decimals
+                await mockDAI.approve(infinitumFarm.address, daiAmountToStake);
+                await mockDAI.connect(jacob).approve(infinitumFarm.address, daiAmountToStake);
+                await mockDAI.connect(martin).approve(infinitumFarm.address, daiAmountToStake);
+                await mockDAI.connect(john).approve(infinitumFarm.address, daiAmountToStake);
+                await mockDAI.connect(steve).approve(infinitumFarm.address, daiAmountToStake);
+                
+                await infinitumFarm.stakeDAI(daiAmountToStake);
+                await infinitumFarm.connect(jacob).stakeDAI(daiAmountToStake);
+                await infinitumFarm.connect(martin).stakeDAI(daiAmountToStake);
+                await infinitumFarm.connect(john).stakeDAI(daiAmountToStake);
+                await infinitumFarm.connect(steve).stakeDAI(daiAmountToStake);
        
             })
         })
