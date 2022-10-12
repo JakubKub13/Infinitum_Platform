@@ -146,6 +146,23 @@ import { expect } from "chai";
 
         describe("Testing Staking functionality", function () {
             beforeEach(async () => {
+                let daiAmountToStake = ethers.utils.parseEther("1"); // Staking 1 DAI with 18 decimals
+
+                await Promise.all([ 
+                    mockDAI.approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(jacob).approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(martin).approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(john).approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(steve).approve(infinitumFarm.address, daiAmountToStake),
+                ]);
+
+                await Promise.all([
+                    infinitumFarm.stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(jacob).stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(martin).stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(john).stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(steve).stakeDAI(daiAmountToStake)
+                ]);
 
             })
         });
