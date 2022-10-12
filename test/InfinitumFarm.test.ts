@@ -111,12 +111,6 @@ import { expect } from "chai";
             });
 
             it("Should stake correctly from multiple accounts", async () => {
-                let ownerBalDaiBefore = await mockDAI.balanceOf(owner.address);
-                let jacobBalDaiBefore = await mockDAI.balanceOf(jacob.address);
-                let martinBalDaiBefore = await mockDAI.balanceOf(martin.address);
-                let johnBalDaiBefore = await mockDAI.balanceOf(john.address);
-                let steveBalDaiBefore = await mockDAI.balanceOf(steve.address);
-
                 let daiAmountToStake = ethers.utils.parseEther("1"); // Staking 1 DAI with 18 decimals
 
                 await Promise.all([ 
@@ -150,9 +144,11 @@ import { expect } from "chai";
         })
         
 
-        // describe("Unstaking functionality", function () {
-            
-        //     });
+        describe("Testing Staking functionality", function () {
+            beforeEach(async () => {
+
+            })
+        });
  })
     
 
