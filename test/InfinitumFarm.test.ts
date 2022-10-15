@@ -146,7 +146,8 @@ import { expect } from "chai";
 
         describe("Testing Unstaking functionality", function () {
             beforeEach(async () => {
-                let daiAmountToStake = ethers.utils.parseEther("1"); // Staking 1 DAI with 18 decimals
+                let daiAmountToStake = ethers.utils.parseEther("2"); // Staking 1 DAI with 18 decimals
+                let daiAmountToUnstake = ethers.utils.parseEther("1");
 
                 await Promise.all([ 
                     mockDAI.approve(infinitumFarm.address, daiAmountToStake),
@@ -163,8 +164,11 @@ import { expect } from "chai";
                     infinitumFarm.connect(john).stakeDAI(daiAmountToStake),
                     infinitumFarm.connect(steve).stakeDAI(daiAmountToStake)
                 ]);
-
             });
+
+            it("")
+
+
         });
  })
     
