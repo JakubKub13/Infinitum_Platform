@@ -147,7 +147,7 @@ import { expect } from "chai";
         describe("Testing Unstaking functionality", function () {
             beforeEach(async () => {
                 let daiAmountToStake = ethers.utils.parseEther("2"); // Staking 1 DAI with 18 decimals
-                let daiAmountToUnstake = ethers.utils.parseEther("1");
+                
 
                 await Promise.all([ 
                     mockDAI.approve(infinitumFarm.address, daiAmountToStake),
@@ -167,6 +167,8 @@ import { expect } from "chai";
             });
 
             it("Should partially unstake DAI", async () => {
+                let daiAmountToUnstake = ethers.utils.parseEther("1");
+
                 let stakedBalanceOwner = await infinitumFarm.balanceOf(owner.address);
                 let stakedBalanceJacob = await infinitumFarm.balanceOf(jacob.address);
                 let stakedBalanceMartin = await infinitumFarm.balanceOf(martin.address);
@@ -178,6 +180,26 @@ import { expect } from "chai";
                 console.log(stakedBalanceMartin.toString());
                 console.log(stakedBalanceJohn.toString());
                 console.log(stakedBalanceSteve.toString());
+
+                await Promise.all([
+                    infinitumFarm.withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(jacob).withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(martin).withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(john).withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake)
+                ]);
+
+                let stakedBalanceOwnerAfter = await infinitumFarm.balanceOf(owner.address);
+                let stakedBalanceJacobAfter = await infinitumFarm.balanceOf(jacob.address);
+                let stakedBalanceMartinAfter = await infinitumFarm.balanceOf(martin.address);
+                let stakedBalanceJohnAfter = await infinitumFarm.balanceOf(john.address);
+                let stakedBalanceSteveAfter = await infinitumFarm.balanceOf(steve.address);
+
+                console.log(stakedBalanceOwnerAfter.toString());
+                console.log(stakedBalanceJacobAfter.toString());
+                console.log(stakedBalanceMartinAfter.toString());
+                console.log(stakedBalanceJohnAfter.toString());
+                console.log(stakedBalanceSteveAfter.toString());
             });
 
 
