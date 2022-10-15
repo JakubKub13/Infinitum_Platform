@@ -220,6 +220,37 @@ import { expect } from "chai";
                 expect(stakedBalanceSteveAfter).to.eq(0);
             });
         });
+
+        describe("Testing Yield Functionality", function () {
+            beforeEach(async () => {
+                let daiAmountToStake = ethers.utils.parseEther("2"); // Staking 1 DAI with 18 decimals
+                let daiAmountToUnstake = ethers.utils.parseEther("2");
+                
+                await Promise.all([ 
+                    mockDAI.approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(jacob).approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(martin).approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(john).approve(infinitumFarm.address, daiAmountToStake),
+                    mockDAI.connect(steve).approve(infinitumFarm.address, daiAmountToStake),
+                ]);
+
+                await Promise.all([
+                    infinitumFarm.stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(jacob).stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(martin).stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(john).stakeDAI(daiAmountToStake),
+                    infinitumFarm.connect(steve).stakeDAI(daiAmountToStake)
+                ]);
+                // MOVE TIME HERE then unstake all DAI
+                await Promise.all([
+                    infinitumFarm.withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(jacob).withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(martin).withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(john).withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake)
+                ]);
+            });
+        })
 });
     
 
