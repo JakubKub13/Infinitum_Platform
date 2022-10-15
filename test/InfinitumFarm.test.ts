@@ -194,13 +194,33 @@ import { expect } from "chai";
                 expect(formatStakedBalanceMartinAfter).to.eq("1.0");
                 expect(formatStakedBalanceJohnAfter).to.eq("1.0");
                 expect(formatStakedBalanceSteveAfter).to.eq("1.0");
-
-                
             });
 
+            it("Should unstake all of DAI", async () => {
+                let daiAmountToUnstake = ethers.utils.parseEther("2");
 
+                await Promise.all([
+                    infinitumFarm.withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(jacob).withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(martin).withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(john).withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake)
+                ]);
+
+                let stakedBalanceOwnerAfter = await infinitumFarm.balanceOf(owner.address);
+                let stakedBalanceJacobAfter = await infinitumFarm.balanceOf(jacob.address);
+                let stakedBalanceMartinAfter = await infinitumFarm.balanceOf(martin.address);
+                let stakedBalanceJohnAfter = await infinitumFarm.balanceOf(john.address);
+                let stakedBalanceSteveAfter = await infinitumFarm.balanceOf(steve.address);
+
+                expect(stakedBalanceOwnerAfter).to.eq(0);
+                expect(stakedBalanceJacobAfter).to.eq(0);
+                expect(stakedBalanceMartinAfter).to.eq(0);
+                expect(stakedBalanceJohnAfter).to.eq(0);
+                expect(stakedBalanceSteveAfter).to.eq(0);
+            });
         });
- })
+});
     
 
             
