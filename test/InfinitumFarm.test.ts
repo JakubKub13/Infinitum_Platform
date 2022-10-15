@@ -166,7 +166,19 @@ import { expect } from "chai";
                 ]);
             });
 
-            it("")
+            it("Should partially unstake DAI", async () => {
+                let stakedBalanceOwner = await infinitumFarm.balanceOf(owner.address);
+                let stakedBalanceJacob = await infinitumFarm.balanceOf(jacob.address);
+                let stakedBalanceMartin = await infinitumFarm.balanceOf(martin.address);
+                let stakedBalanceJohn = await infinitumFarm.balanceOf(john.address);
+                let stakedBalanceSteve = await infinitumFarm.balanceOf(steve.address);
+
+                console.log(stakedBalanceOwner.toString());
+                console.log(stakedBalanceJacob.toString());
+                console.log(stakedBalanceMartin.toString());
+                console.log(stakedBalanceJohn.toString());
+                console.log(stakedBalanceSteve.toString());
+            });
 
 
         });
