@@ -169,18 +169,6 @@ import { expect } from "chai";
             it("Should partially unstake DAI", async () => {
                 let daiAmountToUnstake = ethers.utils.parseEther("1");
 
-                let stakedBalanceOwner = await infinitumFarm.balanceOf(owner.address);
-                let stakedBalanceJacob = await infinitumFarm.balanceOf(jacob.address);
-                let stakedBalanceMartin = await infinitumFarm.balanceOf(martin.address);
-                let stakedBalanceJohn = await infinitumFarm.balanceOf(john.address);
-                let stakedBalanceSteve = await infinitumFarm.balanceOf(steve.address);
-
-                console.log(stakedBalanceOwner.toString());
-                console.log(stakedBalanceJacob.toString());
-                console.log(stakedBalanceMartin.toString());
-                console.log(stakedBalanceJohn.toString());
-                console.log(stakedBalanceSteve.toString());
-
                 await Promise.all([
                     infinitumFarm.withdrawDAI(daiAmountToUnstake),
                     infinitumFarm.connect(jacob).withdrawDAI(daiAmountToUnstake),
@@ -195,11 +183,15 @@ import { expect } from "chai";
                 let stakedBalanceJohnAfter = await infinitumFarm.balanceOf(john.address);
                 let stakedBalanceSteveAfter = await infinitumFarm.balanceOf(steve.address);
 
-                console.log(stakedBalanceOwnerAfter.toString());
-                console.log(stakedBalanceJacobAfter.toString());
-                console.log(stakedBalanceMartinAfter.toString());
-                console.log(stakedBalanceJohnAfter.toString());
-                console.log(stakedBalanceSteveAfter.toString());
+                let formatStakedBalanceOwnerAfter = ethers.utils.formatEther(stakedBalanceOwnerAfter)
+                let formatStakedBalanceJacobrAfter = ethers.utils.formatEther(stakedBalanceJacobAfter)
+                let formatStakedBalanceMartinAfter = ethers.utils.formatEther(stakedBalanceMartinAfter)
+                let formatStakedBalanceJohnAfter = ethers.utils.formatEther(stakedBalanceJohnAfter)
+                let formatStakedBalanceSteveAfter = ethers.utils.formatEther(stakedBalanceSteveAfter) 
+                
+                expect(formatStakedBalanceOwnerAfter).to.eq("1.0")
+
+                
             });
 
 
