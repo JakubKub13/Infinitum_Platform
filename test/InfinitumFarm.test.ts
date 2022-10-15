@@ -144,7 +144,7 @@ import { expect } from "chai";
         })
         
 
-        describe("Testing Staking functionality", function () {
+        describe("Testing Unstaking functionality", function () {
             beforeEach(async () => {
                 let daiAmountToStake = ethers.utils.parseEther("1"); // Staking 1 DAI with 18 decimals
 
@@ -164,7 +164,7 @@ import { expect } from "chai";
                     infinitumFarm.connect(steve).stakeDAI(daiAmountToStake)
                 ]);
 
-            })
+            });
         });
  })
     
