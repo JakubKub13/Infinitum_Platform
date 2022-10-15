@@ -189,7 +189,11 @@ import { expect } from "chai";
                 let formatStakedBalanceJohnAfter = ethers.utils.formatEther(stakedBalanceJohnAfter)
                 let formatStakedBalanceSteveAfter = ethers.utils.formatEther(stakedBalanceSteveAfter) 
                 
-                expect(formatStakedBalanceOwnerAfter).to.eq("1.0")
+                expect(formatStakedBalanceOwnerAfter).to.eq("1.0");
+                expect(formatStakedBalanceJacobrAfter).to.eq("1.0");
+                expect(formatStakedBalanceMartinAfter).to.eq("1.0");
+                expect(formatStakedBalanceJohnAfter).to.eq("1.0");
+                expect(formatStakedBalanceSteveAfter).to.eq("1.0");
 
                 
             });
