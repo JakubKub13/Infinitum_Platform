@@ -307,14 +307,12 @@ import { expect } from "chai";
                 ]);
 
                 let steveBal = await infinitumToken.balanceOf(steve.address);
-                let ownerBal = await infinitumToken.balanceOf(owner.address)
-                let jacobBal = await infinitumToken.balanceOf(jacob.address)
-                let martinBal = await infinitumToken.balanceOf(martin.address)
-                let johnBal = await infinitumToken.balanceOf(john.address)
+                let jacobBal = await infinitumToken.balanceOf(jacob.address);
+                let martinBal = await infinitumToken.balanceOf(martin.address);
+                let johnBal = await infinitumToken.balanceOf(john.address);
                 
                 
                 console.log(`Steve INFT balance after getYield() function called is ${steveBal.toString()} which is equal to what steve earned ${steveEarned.toString()}`);
-                console.log(`Owner INFT balance after getYield() function called is ${ownerBal.toString()} which is equal to what steve earned ${ownerEarned.toString()}`);
                 console.log(`Jacob INFT balance after getYield() function called is ${jacobBal.toString()} which is equal to what steve earned ${jacobEarned.toString()}`);
                 console.log(`Steve INFT balance after getYield() function called is ${martinBal.toString()} which is equal to what steve earned ${martinEarned.toString()}`);
                 console.log(`Steve INFT balance after getYield() function called is ${johnBal.toString()} which is equal to what steve earned ${johnEarned.toString()}`);
