@@ -249,11 +249,18 @@ import { expect } from "chai";
                     infinitumFarm.connect(martin).withdrawDAI(daiAmountToUnstake),
                     infinitumFarm.connect(john).withdrawDAI(daiAmountToUnstake),
                     infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake)
-                ]);
-            });
+                ])
+            })
 
-            it("Should get yield", )
+            it("Should get yield", async () => {
+                let ownerStakedBal = await infinitumFarm.balanceOf(owner.address);
+                console.log(ownerStakedBal.toString())
+                
+                
+                
+            });
         })
+   
 });
     
 
