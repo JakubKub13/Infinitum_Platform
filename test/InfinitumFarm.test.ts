@@ -259,21 +259,49 @@ import { expect } from "chai";
                 let fJohnBalInftInit = ethers.utils.formatEther(johnBalInftInit);
                 let fSteveBalInftInit = ethers.utils.formatEther(steveBalInftInit);
                 
-                let _
+                let _rewardPerToken = await infinitumFarm.rewardPerTokenStored();
 
-                // await network.provider.send("evm_increaseTime", [360])
-                // await network.provider.send("evm_mine")
-                // await Promise.all([
-                //     infinitumFarm.withdrawDAI(daiAmountToUnstake),
-                //     infinitumFarm.connect(jacob).withdrawDAI(daiAmountToUnstake),
-                //     infinitumFarm.connect(martin).withdrawDAI(daiAmountToUnstake),
-                //     infinitumFarm.connect(john).withdrawDAI(daiAmountToUnstake),
-                //     infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake)
-                // ])
-                // let ownerEarned = await infinitumFarm.earned(owner.address);
-                // let jacobEarned = await infinitumFarm.earned(jacob.address);
-                // console.log(ownerEarned.toString())
-                // console.log(jacobEarned.toString())
+                console.log(`Initial reward per token when all users are staking is: ${_rewardPerToken.toString()}`);
+
+                await network.provider.send("evm_increaseTime", [360]);
+                await network.provider.send("evm_mine");
+                await Promise.all([
+                    infinitumFarm.withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(jacob).withdrawDAI(daiAmountToUnstake),
+                ]);
+
+                let ownerEarned = await infinitumFarm.earned(owner.address);
+                let jacobEarned = await infinitumFarm.earned(jacob.address);
+
+                console.log(`Owner has earned ${ownerEarned.toString()} INFT tokens`)
+                console.log(`Jacob has earned ${jacobEarned.toString()} INFT tokens`)
+
+                let _rewardPerToken1 = await infinitumFarm.rewardPerTokenStored();
+                
+                console.log(`Reward per token when Owner and Jacob unstaked is: ${_rewardPerToken1.toString()}`);
+
+                await network.provider.send("evm_increaseTime", [360]);
+                await network.provider.send("evm_mine");
+                await Promise.all([
+                    infinitumFarm.connect(martin).withdrawDAI(daiAmountToUnstake),
+                    infinitumFarm.connect(john).withdrawDAI(daiAmountToUnstake),
+                ]);
+
+                let martinEarned = await infinitumFarm.earned(martin.address);
+                let johnEarned = await infinitumFarm.earned(john.address);
+
+                console.log(`Martin has earned ${martinEarned.toString()} INFT tokens`)
+                console.log(`John has earned ${johnEarned.toString()} INFT tokens`)
+
+                let _rewardPerToken2 = await infinitumFarm.rewardPerTokenStored();
+
+                console.log(`Reward per token when Martin and John unstaked is: ${_rewardPerToken2.toString()}`);
+
+                await network.provider.send("evm_increaseTime", [360]);
+                await network.provider.send("evm_mine");
+                await infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake);
+
+                let steveEarned = await infinitumFarm.earned(steve.address);
             });
         })
 });
