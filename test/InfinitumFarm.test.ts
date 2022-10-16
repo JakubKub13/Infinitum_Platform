@@ -241,7 +241,8 @@ import { expect } from "chai";
                     infinitumFarm.connect(john).stakeDAI(daiAmountToStake),
                     infinitumFarm.connect(steve).stakeDAI(daiAmountToStake)
                 ]);
-                // MOVE TIME HERE then unstake all DAI
+                await network.provider.send("evm_increaseTime", [3600])
+                await network.provider.send("evm_mine")
                 await Promise.all([
                     infinitumFarm.withdrawDAI(daiAmountToUnstake),
                     infinitumFarm.connect(jacob).withdrawDAI(daiAmountToUnstake),
@@ -250,6 +251,8 @@ import { expect } from "chai";
                     infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake)
                 ]);
             });
+
+            it("Should get yield", )
         })
 });
     
