@@ -249,15 +249,6 @@ import { expect } from "chai";
             })
 
             it("Should get yield", async () => {
-                let jacobBalInftInit = await infinitumToken.balanceOf(jacob.address);
-                let martinBalInftInit = await infinitumToken.balanceOf(martin.address);
-                let johnBalInftInit = await infinitumToken.balanceOf(john.address);
-                let steveBalInftInit = await infinitumToken.balanceOf(steve.address);
-              
-                let fJacobBalInftInit =  ethers.utils.formatEther(jacobBalInftInit);
-                let fMartinBalInftInit = ethers.utils.formatEther(martinBalInftInit);
-                let fJohnBalInftInit = ethers.utils.formatEther(johnBalInftInit);
-                let fSteveBalInftInit = ethers.utils.formatEther(steveBalInftInit);
                 
                 let _rewardPerToken = await infinitumFarm.rewardPerTokenStored();
 
@@ -306,6 +297,17 @@ import { expect } from "chai";
 
                 let _rewardPerToken3 = await infinitumFarm.rewardPerTokenStored();
                 console.log(`Reward per token when all users unstaked is: ${_rewardPerToken3.toString()}`);
+
+                await Promise.all([
+                    infinitumFarm.getYield(),
+                    infinitumFarm.connect(jacob).getYield(),
+                    infinitumFarm.connect(martin).getYield(),
+                    infinitumFarm.connect(john).getYield(),
+                    infinitumFarm.connect(steve).getYield()
+                ]);
+
+                let steveBal = await infinitumToken.balanceOf(steve.address)
+                console.log(await infinitumFarm.rewards(jacob.address))
             });
         })
 });
