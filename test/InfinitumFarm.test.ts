@@ -302,6 +302,10 @@ import { expect } from "chai";
                 await infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake);
 
                 let steveEarned = await infinitumFarm.earned(steve.address);
+                console.log(`Steve has earned ${steveEarned.toString()} INFT tokens`);
+
+                let _rewardPerToken3 = await infinitumFarm.rewardPerTokenStored();
+                console.log(`Reward per token when all users unstaked is: ${_rewardPerToken3.toString()}`);
             });
         })
 });
