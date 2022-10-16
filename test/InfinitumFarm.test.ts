@@ -222,9 +222,10 @@ import { expect } from "chai";
         });
 
         describe("Testing Yield Functionality", function () {
+            let daiAmountToStake = ethers.utils.parseEther("2");
+            let daiAmountToUnstake = ethers.utils.parseEther("2");
+            
             beforeEach(async () => {
-                let daiAmountToStake = ethers.utils.parseEther("2"); // Staking 1 DAI with 18 decimals
-                let daiAmountToUnstake = ethers.utils.parseEther("2");
                 await infinitumToken.mint(infinitumFarm.address, infinitumAmountInitFarm)
                 let modifyRewardTx = await infinitumFarm.modifyRewardAmount(1000);
                 await modifyRewardTx.wait();
@@ -248,25 +249,33 @@ import { expect } from "chai";
             })
 
             it("Should get yield", async () => {
-                let ownerBalInftInit = 
-                let jacobBalInftInit = 
+                let jacobBalInftInit = await infinitumToken.balanceOf(jacob.address);
+                let martinBalInftInit = await infinitumToken.balanceOf(martin.address);
+                let johnBalInftInit = await infinitumToken.balanceOf(john.address);
+                let steveBalInftInit = await infinitumToken.balanceOf(steve.address);
+              
+                let fJacobBalInftInit =  ethers.utils.formatEther(jacobBalInftInit);
+                let fMartinBalInftInit = ethers.utils.formatEther(martinBalInftInit);
+                let fJohnBalInftInit = ethers.utils.formatEther(johnBalInftInit);
+                let fSteveBalInftInit = ethers.utils.formatEther(steveBalInftInit);
+                
+                let _
 
-                await network.provider.send("evm_increaseTime", [360])
-                await network.provider.send("evm_mine")
-                await Promise.all([
-                    infinitumFarm.withdrawDAI(daiAmountToUnstake),
-                    infinitumFarm.connect(jacob).withdrawDAI(daiAmountToUnstake),
-                    infinitumFarm.connect(martin).withdrawDAI(daiAmountToUnstake),
-                    infinitumFarm.connect(john).withdrawDAI(daiAmountToUnstake),
-                    infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake)
-                ])
-                let ownerEarned = await infinitumFarm.earned(owner.address);
-                let jacobEarned = await infinitumFarm.earned(jacob.address);
-                console.log(ownerEarned.toString())
-                console.log(jacobEarned.toString())
+                // await network.provider.send("evm_increaseTime", [360])
+                // await network.provider.send("evm_mine")
+                // await Promise.all([
+                //     infinitumFarm.withdrawDAI(daiAmountToUnstake),
+                //     infinitumFarm.connect(jacob).withdrawDAI(daiAmountToUnstake),
+                //     infinitumFarm.connect(martin).withdrawDAI(daiAmountToUnstake),
+                //     infinitumFarm.connect(john).withdrawDAI(daiAmountToUnstake),
+                //     infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake)
+                // ])
+                // let ownerEarned = await infinitumFarm.earned(owner.address);
+                // let jacobEarned = await infinitumFarm.earned(jacob.address);
+                // console.log(ownerEarned.toString())
+                // console.log(jacobEarned.toString())
             });
         })
-   
 });
     
 
