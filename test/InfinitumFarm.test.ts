@@ -253,8 +253,10 @@ import { expect } from "chai";
             })
 
             it("Should get yield", async () => {
-                let ownerStakedBal = await infinitumFarm.balanceOf(owner.address);
-                console.log(ownerStakedBal.toString())
+                let _rewardRate = await infinitumFarm.rewardRate();
+                let _rewardPerTokenStored = await infinitumFarm.rewardPerTokenStored();
+                console.log(_rewardRate.toString())
+                console.log(_rewardPerTokenStored.toString())
                 
                 
                 
