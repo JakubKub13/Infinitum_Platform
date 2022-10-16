@@ -225,6 +225,9 @@ import { expect } from "chai";
             beforeEach(async () => {
                 let daiAmountToStake = ethers.utils.parseEther("2"); // Staking 1 DAI with 18 decimals
                 let daiAmountToUnstake = ethers.utils.parseEther("2");
+                await infinitumToken.mint(infinitumFarm.address, infinitumAmountInitFarm)
+                let modifyRewardTx = await infinitumFarm.modifyRewardAmount(1000);
+                await modifyRewardTx.wait();
                 
                 await Promise.all([ 
                     mockDAI.approve(infinitumFarm.address, daiAmountToStake),
@@ -241,7 +244,14 @@ import { expect } from "chai";
                     infinitumFarm.connect(john).stakeDAI(daiAmountToStake),
                     infinitumFarm.connect(steve).stakeDAI(daiAmountToStake)
                 ]);
-                await network.provider.send("evm_increaseTime", [3600])
+                
+            })
+
+            it("Should get yield", async () => {
+                let ownerBalInftInit = 
+                let jacobBalInftInit = 
+
+                await network.provider.send("evm_increaseTime", [360])
                 await network.provider.send("evm_mine")
                 await Promise.all([
                     infinitumFarm.withdrawDAI(daiAmountToUnstake),
@@ -250,16 +260,10 @@ import { expect } from "chai";
                     infinitumFarm.connect(john).withdrawDAI(daiAmountToUnstake),
                     infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake)
                 ])
-            })
-
-            it("Should get yield", async () => {
-                let _rewardRate = await infinitumFarm.rewardRate();
-                let _rewardPerTokenStored = await infinitumFarm.rewardPerTokenStored();
-                console.log(_rewardRate.toString())
-                console.log(_rewardPerTokenStored.toString())
-                
-                
-                
+                let ownerEarned = await infinitumFarm.earned(owner.address);
+                let jacobEarned = await infinitumFarm.earned(jacob.address);
+                console.log(ownerEarned.toString())
+                console.log(jacobEarned.toString())
             });
         })
    
