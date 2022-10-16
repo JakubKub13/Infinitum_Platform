@@ -307,7 +307,8 @@ import { expect } from "chai";
                 ]);
 
                 let steveBal = await infinitumToken.balanceOf(steve.address)
-                console.log(await infinitumFarm.rewards(jacob.address))
+                
+                console.log(`Steve balance after getYield() function called is ${steveBal.toString()} which is equal to what steve earned ${steveEarned.toString()}`);
             });
         })
 });
