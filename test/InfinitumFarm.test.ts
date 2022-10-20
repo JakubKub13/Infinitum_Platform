@@ -304,7 +304,8 @@ import { expect } from "chai";
                 console.log(`Steve has earned ${steveEarnedFormat.toString()} INFT tokens`);
 
                 let _rewardPerToken3 = await infinitumFarm.rewardPerTokenStored();
-                console.log(`Reward per token when all users unstaked is: ${_rewardPerToken3.toString()}`);
+                let _rewardPerToken3Format = ethers.utils.formatEther(_rewardPerToken3);
+                console.log(`Reward per token when all users unstaked is: ${_rewardPerToken3Format}`);
 
                 await Promise.all([
                     infinitumFarm.getYield(),
@@ -325,9 +326,14 @@ import { expect } from "chai";
                 
                 
                 //console.log(`Steve INFT balance after getYield() function called is ${steveBalFormat.toString()} which is equal to what steve earned ${steveEarnedFormat.toString()}`);
-                console.log(`Jacob INFT balance after getYield() function called is ${jacobBal.toString()} which is equal to what steve earned ${jacobEarned.toString()}`);
-                console.log(`Steve INFT balance after getYield() function called is ${martinBal.toString()} which is equal to what steve earned ${martinEarned.toString()}`);
-                console.log(`Steve INFT balance after getYield() function called is ${johnBal.toString()} which is equal to what steve earned ${johnEarned.toString()}`);
+                console.log(`Jacob INFT balance after getYield() function called is ${jacobBalFormat} which is equal to what steve earned ${jacobEarnedFormat}`);
+                expect(jacobBalFormat).to.eq(jacobEarnedFormat);
+                console.log(`Martin INFT balance after getYield() function called is ${martinBalFormat} which is equal to what steve earned ${martinEarnedFormat}`);
+                expect(martinBalFormat).to.eq(martinEarnedFormat);
+                console.log(`John INFT balance after getYield() function called is ${johnBalFormat} which is equal to what steve earned ${johnEarnedFormat}`);
+                expect(johnBalFormat).to.eq(johnEarnedFormat);
+                console.log(`Steve INFT balance after getYield() function called is ${steveBalFormat} which is equal to what steve earned ${steveEarnedFormat}`);
+                expect(steveBalFormat).to.eq(steveEarnedFormat);
             });
         })
 });
