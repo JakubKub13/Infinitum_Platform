@@ -266,8 +266,8 @@ import { expect } from "chai";
                 let jacobEarned = await infinitumFarm.earned(jacob.address);
                 let jacobEarnedFormat = ethers.utils.formatEther(jacobEarned)
 
-                console.log(`Owner has earned ${ownerEarnedFormat.toString()} INFT tokens`)
-                console.log(`Jacob has earned ${jacobEarnedFormat.toString()} INFT tokens`)
+                console.log(`Owner has earned ${ownerEarnedFormat} INFT tokens`)
+                console.log(`Jacob has earned ${jacobEarnedFormat} INFT tokens`)
 
                 let _rewardPerToken1 = await infinitumFarm.rewardPerTokenStored();
                 
@@ -290,8 +290,9 @@ import { expect } from "chai";
                 console.log(`John has earned ${johnEarnedFormat.toString()} INFT tokens`)
 
                 let _rewardPerToken2 = await infinitumFarm.rewardPerTokenStored();
+                let _rewardPerToken2Format = ethers.utils.formatEther(_rewardPerToken2);
 
-                console.log(`Reward per token when Martin and John unstaked is: ${_rewardPerToken2.toString()}`);
+                console.log(`Reward per token when Martin and John unstaked is: ${_rewardPerToken2Format}`);
 
                 await network.provider.send("evm_increaseTime", [360]);
                 await network.provider.send("evm_mine");
