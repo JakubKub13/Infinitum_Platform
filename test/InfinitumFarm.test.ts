@@ -262,10 +262,12 @@ import { expect } from "chai";
                 ]);
 
                 let ownerEarned = await infinitumFarm.earned(owner.address);
+                let ownerEarnedFormat = ethers.utils.formatEther(ownerEarned);
                 let jacobEarned = await infinitumFarm.earned(jacob.address);
+                let jacobEarnedFormat = ethers.utils.formatEther(jacobEarned)
 
-                console.log(`Owner has earned ${ownerEarned.toString()} INFT tokens`)
-                console.log(`Jacob has earned ${jacobEarned.toString()} INFT tokens`)
+                console.log(`Owner has earned ${ownerEarnedFormat.toString()} INFT tokens`)
+                console.log(`Jacob has earned ${jacobEarnedFormat.toString()} INFT tokens`)
 
                 let _rewardPerToken1 = await infinitumFarm.rewardPerTokenStored();
                 
@@ -279,10 +281,13 @@ import { expect } from "chai";
                 ]);
 
                 let martinEarned = await infinitumFarm.earned(martin.address);
+                let martinEarnedFormat = ethers.utils.parseEther(martinEarned);
                 let johnEarned = await infinitumFarm.earned(john.address);
+                let johnEarnedFormat = ethers.utils.parseEther(johnEarned);
 
-                console.log(`Martin has earned ${martinEarned.toString()} INFT tokens`)
-                console.log(`John has earned ${johnEarned.toString()} INFT tokens`)
+
+                console.log(`Martin has earned ${martinEarnedFormat.toString()} INFT tokens`)
+                console.log(`John has earned ${johnEarnedFormat.toString()} INFT tokens`)
 
                 let _rewardPerToken2 = await infinitumFarm.rewardPerTokenStored();
 
@@ -293,7 +298,8 @@ import { expect } from "chai";
                 await infinitumFarm.connect(steve).withdrawDAI(daiAmountToUnstake);
 
                 let steveEarned = await infinitumFarm.earned(steve.address);
-                console.log(`Steve has earned ${steveEarned.toString()} INFT tokens`);
+                let steveEarnedFormat = ethers.utils.formatEther(steveEarned);
+                console.log(`Steve has earned ${steveEarnedFormat.toString()} INFT tokens`);
 
                 let _rewardPerToken3 = await infinitumFarm.rewardPerTokenStored();
                 console.log(`Reward per token when all users unstaked is: ${_rewardPerToken3.toString()}`);
@@ -307,12 +313,16 @@ import { expect } from "chai";
                 ]);
 
                 let steveBal = await infinitumToken.balanceOf(steve.address);
+                let steveBalFormat = ethers.utils.formatEther(steveBal);
                 let jacobBal = await infinitumToken.balanceOf(jacob.address);
+                let jacobBalFormat = ethers.utils.formatEther(jacobBal);
                 let martinBal = await infinitumToken.balanceOf(martin.address);
+                let martinBalFormat = ethers.utils.formatEther(martinBal);
                 let johnBal = await infinitumToken.balanceOf(john.address);
+                let johnBalFormat = ethers.utils.formatEther(johnBal);
                 
                 
-                console.log(`Steve INFT balance after getYield() function called is ${steveBal.toString()} which is equal to what steve earned ${steveEarned.toString()}`);
+                //console.log(`Steve INFT balance after getYield() function called is ${steveBalFormat.toString()} which is equal to what steve earned ${steveEarnedFormat.toString()}`);
                 console.log(`Jacob INFT balance after getYield() function called is ${jacobBal.toString()} which is equal to what steve earned ${jacobEarned.toString()}`);
                 console.log(`Steve INFT balance after getYield() function called is ${martinBal.toString()} which is equal to what steve earned ${martinEarned.toString()}`);
                 console.log(`Steve INFT balance after getYield() function called is ${johnBal.toString()} which is equal to what steve earned ${johnEarned.toString()}`);
