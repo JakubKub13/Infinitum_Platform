@@ -23,8 +23,8 @@ const deployInfinitumFarm: DeployFunction = async function (
         const infinitumToken = await ethers.getContract("InfinitumToken");
         infinitumTokenAddr = infinitumToken.address;
     } else {
-        daiStablecoinAddr = networkConfig[network.config.chainId![""]]
-        infinitumTokenAddress = networkConfig[network.config.chainId!][""]
+        daiStablecoinAddr = networkConfig[network.config.chainId!["daiStableCoinAddress"]]
+        infinitumTokenAddr = networkConfig[network.config.chainId!]["infinitumTokenAddress"]
     }
     const waitBlockConfirmation = developmentChains.includes(network.name) ? 1 : VERIFICATION_BLOCK_CONFIRMATION
     log("-------------------------------------------------------------------------------------------")

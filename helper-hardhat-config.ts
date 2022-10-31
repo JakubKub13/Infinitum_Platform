@@ -6,6 +6,7 @@ export interface networkConfigItem {
     vrfCoordinatorV2: string
     infinitumTokenAddress: string
     infinitasFactoryAddress: string
+    daiStableCoinAddress: string
 }
 
 export interface networkConfigInfo {
@@ -21,12 +22,10 @@ export const networkConfig: networkConfigInfo = {
     },
     5: {
         name: "goerli",
-        subscriptionId: "2111",
-        gasLane: "0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15",
-        callbackGasLimit: "500000",
-        vrfCoordinatorV2: "0x2Ca8E0C643bDe4C2E08ab1fA0da3401AdAD7734D",
-        infinitumTokenAddress: "",
-        infinitasFactoryAddress: "",
+        
+        infinitumTokenAddress: "0x62802Bc90C72376020ad1edaCa0F3Ee7aDD07ac2",
+        daiStableCoinAddress: "0x9D233A907E065855D2A9c7d4B552ea27fB2E5a36",
+        //infinitumFarm: "",
 
     },
     //1: {
