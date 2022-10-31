@@ -26,7 +26,6 @@ export const networkConfig: networkConfigInfo = {
         infinitumTokenAddress: "0x62802Bc90C72376020ad1edaCa0F3Ee7aDD07ac2",
         daiStableCoinAddress: "0x9D233A907E065855D2A9c7d4B552ea27fB2E5a36",
         infinitumFarm: "0xDf490312C83108F09c4F11B00b49bc24491d1903",
-
     },
     //1: {
     //    name: "mainnet",
