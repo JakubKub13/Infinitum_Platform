@@ -30,7 +30,7 @@ const deployInfinitumFarm: DeployFunction = async function (
     log("-------------------------------------------------------------------------------------------")
 
     const args: any[] = [
-        "0x9D233A907E065855D2A9c7d4B552ea27fB2E5a36",
+        daiStablecoinAddr,
         infinitumTokenAddr,
     ] 
 
