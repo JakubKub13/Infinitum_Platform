@@ -1,4 +1,4 @@
-import { BigNumber } from "ethers";
+import { BigNumber, Contract } from "ethers";
 import { getNamedAccounts, deployments, network, run } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
@@ -13,7 +13,7 @@ const deployInfinitumFarm: DeployFunction = async function (
     const { deploy, log } = deployments;
     const { deployer } = await getNamedAccounts();
     const chainId = network.config.chainId;
-    let daiStablecoinAddr: MockERC20;
+    let daiStablecoinAddr: Contract;
     let infinitumTokenAddr: InfinitumToken;
   
 
@@ -30,9 +30,11 @@ const deployInfinitumFarm: DeployFunction = async function (
     log("-------------------------------------------------------------------------------------------")
 
     const args: any[] = [
-        daiStablecoinAddr,
+        "0x9D233A907E065855D2A9c7d4B552ea27fB2E5a36",
         infinitumTokenAddr,
     ] 
+
+   
 
     const infinitumFarm = await deploy("InfinitumFarm", {
         from: deployer,
@@ -46,7 +48,7 @@ const deployInfinitumFarm: DeployFunction = async function (
         log("Verifying......")
         await verify(infinitumFarm.address, args)
     }
-}
+ }
 
 export default deployInfinitumFarm
 deployInfinitumFarm.tags = ["all", "farm"]
